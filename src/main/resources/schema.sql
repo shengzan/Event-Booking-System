@@ -45,8 +45,9 @@ CREATE TABLE `order` (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT,
     order_date DATETIME NOT NULL,
-    status ENUM('PAID', 'REFUNDED', 'CANCELLED') NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    status VARCHAR(20) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    CHECK (status IN ('PAID', 'REFUNDED', 'CANCELLED'))
 );
 
 -- Add foreign key constraint for order_id in Ticket table
