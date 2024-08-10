@@ -2,7 +2,9 @@ package com.example.eventbookingsystem.model;
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "`order`")
@@ -61,6 +63,10 @@ public class Order {
         ticket.setOrder(null);
     }
 
+    public double calculateTotalPrice() {
+        return tickets.stream().mapToDouble(Ticket::getTicketPrice).sum();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,29 +90,4 @@ public class Order {
                 ", tickets=" + tickets +
                 '}';
     }
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<Ticket> tickets;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    private LocalDateTime orderDate;
-
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
-
-    public enum OrderStatus {
-        PAID, REFUNDED, CANCELLED
-    }
-
-    // TODO: Add getters and setters for all fields
-    // TODO: Add constructors (default and parameterized)
-    // TODO: Implement toString() method
-    // TODO: Implement equals() and hashCode() methods
-    // TODO: Add method to calculate total order price
 }

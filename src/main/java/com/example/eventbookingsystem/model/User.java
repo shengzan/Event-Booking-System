@@ -1,6 +1,10 @@
 package com.example.eventbookingsystem.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user")
@@ -9,25 +13,35 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Username is required")
+    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
     @Column(nullable = false, unique = true)
     private String username;
 
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     @Column(nullable = false)
     private String password;
 
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotNull(message = "User role is required")
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Size(max = 50, message = "First name must be at most 50 characters")
     @Column(name = "first_name")
     private String firstName;
 
+    @Size(max = 50, message = "Last name must be at most 50 characters")
     @Column(name = "last_name")
     private String lastName;
 
+    @Pattern(regexp = "^\\+?[0-9]{10,14}$", message = "Phone number should be valid")
     @Column(name = "phone_number")
     private String phoneNumber;
 
@@ -94,6 +108,10 @@ public class User {
         event.setOrganizer(null);
     }
 
+    public boolean isEventOrganizer() {
+        return this.role == UserRole.ORGANIZER;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,22 +137,4 @@ public class User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String username;
-    private String password;
-    private String email;
-    private String role;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-
-    // TODO: Add getters and setters for all fields
-    // TODO: Add constructors (default and parameterized)
-    // TODO: Add validation annotations for username, password, email, firstName, lastName, and phoneNumber
-    // TODO: Implement a method to check if the user is an Event Organizer
-    // TODO: Implement toString() method
-    // TODO: Implement equals() and hashCode() methods
 }
