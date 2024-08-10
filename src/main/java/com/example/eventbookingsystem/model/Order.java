@@ -19,6 +19,13 @@ public class Order {
 
     private LocalDateTime orderDate;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    public enum OrderStatus {
+        PAID, REFUNDED, CANCELLED
+    }
+
     // TODO: Add getters and setters for all fields
     // TODO: Add constructors (default and parameterized)
     // TODO: Implement toString() method

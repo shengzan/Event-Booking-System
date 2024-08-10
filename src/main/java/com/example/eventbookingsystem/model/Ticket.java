@@ -20,6 +20,8 @@ public class Ticket {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    private Integer seatNumber;
+
     // TODO: Add getters and setters for all fields
     // TODO: Add constructors (default and parameterized)
     // TODO: Implement toString() method
