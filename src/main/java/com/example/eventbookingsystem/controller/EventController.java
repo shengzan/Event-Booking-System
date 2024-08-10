@@ -1,7 +1,9 @@
 package com.example.eventbookingsystem.controller;
 
 import com.example.eventbookingsystem.model.Event;
+import com.example.eventbookingsystem.model.User;
 import com.example.eventbookingsystem.service.EventService;
+import com.example.eventbookingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
