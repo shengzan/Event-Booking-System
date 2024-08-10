@@ -33,7 +33,6 @@ CREATE TABLE event (
 CREATE TABLE ticket (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     event_id BIGINT,
-    user_id BIGINT,
     order_id BIGINT,
     seat_number INT,
     FOREIGN KEY (event_id) REFERENCES event(id),
@@ -46,7 +45,6 @@ CREATE TABLE `order` (
     user_id BIGINT,
     order_date DATETIME NOT NULL,
     status VARCHAR(20) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user(id),
     CHECK (status IN ('PAID', 'REFUNDED', 'CANCELLED'))
 );
 
