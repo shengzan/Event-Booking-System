@@ -23,56 +23,94 @@ public class OrderController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Long[] ticketIds, Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        Order order = orderService.createOrder(ticketIds, user);
-        return ResponseEntity.ok(order);
+    public ResponseEntity<?> createOrder(@RequestBody Long[] ticketIds, Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            Order order = orderService.createOrder(ticketIds, user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(order);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating order: " + e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id, Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        if (orderService.isUserAuthorizedForOrder(user, id)) {
-            Order order = orderService.getOrderById(id);
-            return order != null ? ResponseEntity.ok(order) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> getOrderById(@PathVariable Long id, Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            if (orderService.isUserAuthorizedForOrder(user, id) || user.getRole() == User.UserRole.ADMIN) {
+                Order order = orderService.getOrderById(id);
+                return order != null ? ResponseEntity.ok(order) : ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permission to view this order");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error retrieving order: " + e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<Order>> getUserOrders(Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        List<Order> orders = orderService.getOrdersByUser(user);
-        return ResponseEntity.ok(orders);
+    public ResponseEntity<?> getUserOrders(Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            List<Order> orders = orderService.getOrdersByUser(user);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error retrieving user orders: " + e.getMessage());
+        }
     }
 
     @PostMapping("/{id}/cancel")
     public ResponseEntity<?> cancelOrder(@PathVariable Long id, Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        if (orderService.isUserAuthorizedForOrder(user, id)) {
-            Order cancelledOrder = orderService.cancelOrder(id);
-            return ResponseEntity.ok(cancelledOrder);
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            if (orderService.isUserAuthorizedForOrder(user, id) || user.getRole() == User.UserRole.ADMIN) {
+                Order cancelledOrder = orderService.cancelOrder(id);
+                return ResponseEntity.ok(cancelledOrder);
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permission to cancel this order");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error cancelling order: " + e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PostMapping("/{id}/refund")
     public ResponseEntity<?> refundOrder(@PathVariable Long id, Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        if (orderService.isUserAuthorizedForOrder(user, id)) {
-            Order refundedOrder = orderService.refundOrder(id);
-            return ResponseEntity.ok(refundedOrder);
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            if (user.getRole() == User.UserRole.ADMIN) {
+                Order refundedOrder = orderService.refundOrder(id);
+                return ResponseEntity.ok(refundedOrder);
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only administrators can refund orders");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error refunding order: " + e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<Order>> getOrdersByStatus(@PathVariable Order.OrderStatus status, Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        if (user.getRole() == User.UserRole.ADMIN) {
-            List<Order> orders = orderService.getOrdersByStatus(status);
-            return ResponseEntity.ok(orders);
+    public ResponseEntity<?> getOrdersByStatus(@PathVariable Order.OrderStatus status, Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            if (user.getRole() == User.UserRole.ADMIN) {
+                List<Order> orders = orderService.getOrdersByStatus(status);
+                return ResponseEntity.ok(orders);
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only administrators can view orders by status");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error retrieving orders by status: " + e.getMessage());
         }
-        return ResponseEntity.forbidden().build();
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllOrders(Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            if (user.getRole() == User.UserRole.ADMIN) {
+                List<Order> orders = orderService.getAllOrders();
+                return ResponseEntity.ok(orders);
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only administrators can view all orders");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error retrieving all orders: " + e.getMessage());
+        }
     }
 }

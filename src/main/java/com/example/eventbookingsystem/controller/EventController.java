@@ -16,6 +16,9 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping
     public ResponseEntity<List<Event>> getAllEvents() {
         return ResponseEntity.ok(eventService.getAllEvents());
@@ -28,33 +31,46 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<Event> addEvent(@RequestBody Event event, Authentication authentication) {
-        // Assuming the authentication object contains the user's ID
-        Long userId = Long.parseLong(authentication.getName());
-        if (eventService.isUserEventOrganizer(userId, event.getId())) {
-            return ResponseEntity.ok(eventService.addEvent(event));
+    public ResponseEntity<?> addEvent(@RequestBody @Valid Event event, Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            if (user.getRole() == User.UserRole.ORGANIZER || user.getRole() == User.UserRole.ADMIN) {
+                event.setOrganizer(user);
+                Event createdEvent = eventService.addEvent(event);
+                return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only organizers can create events");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating event: " + e.getMessage());
         }
-        return ResponseEntity.forbidden().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event, Authentication authentication) {
-        Long userId = Long.parseLong(authentication.getName());
-        if (eventService.isUserEventOrganizer(userId, id)) {
-            Event updatedEvent = eventService.updateEvent(id, event);
-            return updatedEvent != null ? ResponseEntity.ok(updatedEvent) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody @Valid Event event, Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            if (eventService.isUserEventOrganizer(user.getId(), id) || user.getRole() == User.UserRole.ADMIN) {
+                Event updatedEvent = eventService.updateEvent(id, event);
+                return updatedEvent != null ? ResponseEntity.ok(updatedEvent) : ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permission to update this event");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error updating event: " + e.getMessage());
         }
-        return ResponseEntity.forbidden().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable Long id, Authentication authentication) {
-        Long userId = Long.parseLong(authentication.getName());
-        if (eventService.isUserEventOrganizer(userId, id)) {
-            eventService.deleteEvent(id);
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id, Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            if (eventService.isUserEventOrganizer(user.getId(), id) || user.getRole() == User.UserRole.ADMIN) {
+                eventService.deleteEvent(id);
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permission to delete this event");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error deleting event: " + e.getMessage());
         }
-        return ResponseEntity.forbidden().build();
     }
 
     @GetMapping("/organizer/{organizerId}")
