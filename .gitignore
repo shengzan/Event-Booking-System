@@ -28,8 +28,8 @@ replay_pid*
 
 .aider*
 
-# ClassDiagram.txt
-# UseCases.txt
+ClassDiagram.txt
+UseCases.txt
 
 # Maven
 target/
@@ -69,3 +69,5 @@ build/
 # Logs
 logs/
 *.log
+
+**/.DS_Store
