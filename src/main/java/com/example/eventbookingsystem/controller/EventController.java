@@ -3,6 +3,8 @@ package com.example.eventbookingsystem.controller;
 import com.example.eventbookingsystem.model.Event;
 import com.example.eventbookingsystem.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,41 +17,48 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping
-    public List<Event> getAllEvents() {
-        // TODO: Implement getAllEvents
-        return null;
+    public ResponseEntity<List<Event>> getAllEvents() {
+        return ResponseEntity.ok(eventService.getAllEvents());
     }
 
     @GetMapping("/{id}")
-    public Event getEventById(@PathVariable Long id) {
-        // TODO: Implement getEventById
-        return null;
+    public ResponseEntity<Event> getEventById(@PathVariable Long id) {
+        Event event = eventService.getEventById(id);
+        return event != null ? ResponseEntity.ok(event) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public Event addEvent(@RequestBody Event event) {
-        // TODO: Implement addEvent
-        // TODO: Validate that the user is an Event Organizer
-        return null;
+    public ResponseEntity<Event> addEvent(@RequestBody Event event, Authentication authentication) {
+        // Assuming the authentication object contains the user's ID
+        Long userId = Long.parseLong(authentication.getName());
+        if (eventService.isUserEventOrganizer(userId, event.getId())) {
+            return ResponseEntity.ok(eventService.addEvent(event));
+        }
+        return ResponseEntity.forbidden().build();
     }
 
     @PutMapping("/{id}")
-    public Event updateEvent(@PathVariable Long id, @RequestBody Event event) {
-        // TODO: Implement updateEvent
-        // TODO: Validate that the user is the Event Organizer of this event
-        return null;
+    public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event, Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+        if (eventService.isUserEventOrganizer(userId, id)) {
+            Event updatedEvent = eventService.updateEvent(id, event);
+            return updatedEvent != null ? ResponseEntity.ok(updatedEvent) : ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.forbidden().build();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEvent(@PathVariable Long id) {
-        // TODO: Implement deleteEvent
-        // TODO: Validate that the user is the Event Organizer of this event
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long id, Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+        if (eventService.isUserEventOrganizer(userId, id)) {
+            eventService.deleteEvent(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.forbidden().build();
     }
 
     @GetMapping("/organizer/{organizerId}")
-    public List<Event> getEventsByOrganizer(@PathVariable Long organizerId) {
-        // TODO: Implement getEventsByOrganizer
-        // TODO: Validate that the user is authorized to view these events
-        return null;
+    public ResponseEntity<List<Event>> getEventsByOrganizer(@PathVariable Long organizerId) {
+        return ResponseEntity.ok(eventService.getEventsByOrganizer(organizerId));
     }
 }
