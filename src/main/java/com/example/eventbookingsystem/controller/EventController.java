@@ -39,7 +39,7 @@ public class EventController {
                 Event createdEvent = eventService.addEvent(event);
                 return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
             }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only organizers can create events");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only organizers and admins can create events");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating event: " + e.getMessage());
         }
@@ -51,7 +51,10 @@ public class EventController {
             User user = userService.getUserByUsername(authentication.getName());
             if (eventService.isUserEventOrganizer(user.getId(), id) || user.getRole() == User.UserRole.ADMIN) {
                 Event updatedEvent = eventService.updateEvent(id, event);
-                return updatedEvent != null ? ResponseEntity.ok(updatedEvent) : ResponseEntity.notFound().build();
+                if (updatedEvent == null) {
+                    return ResponseEntity.notFound().build();
+                }
+                return ResponseEntity.ok(updatedEvent);
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permission to update this event");
         } catch (Exception e) {
@@ -64,6 +67,9 @@ public class EventController {
         try {
             User user = userService.getUserByUsername(authentication.getName());
             if (eventService.isUserEventOrganizer(user.getId(), id) || user.getRole() == User.UserRole.ADMIN) {
+                if (eventService.getEventById(id) == null) {
+                    return ResponseEntity.notFound().build();
+                }
                 eventService.deleteEvent(id);
                 return ResponseEntity.noContent().build();
             }
