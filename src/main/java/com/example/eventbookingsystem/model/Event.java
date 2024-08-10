@@ -1,9 +1,6 @@
 package com.example.eventbookingsystem.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 
 @Entity
 public class Event {
@@ -15,6 +12,18 @@ public class Event {
     private String description;
     private String date;
     private int capacity;
+    private String location;
+    private double price;
 
-    // TODO: Add getters, setters, and constructors
+    @ManyToOne
+    @JoinColumn(name = "organizer_id")
+    private User organizer;
+
+    // TODO: Add getters and setters for all fields
+    // TODO: Add constructors (default and parameterized)
+    // TODO: Add validation annotations for name, description, date, capacity, location, and price
+    // TODO: Implement toString() method
+    // TODO: Implement equals() and hashCode() methods
+    // TODO: Add method to check if the event has available capacity
+    // TODO: Add method to decrease available capacity when a ticket is sold
 }

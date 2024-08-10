@@ -9,4 +9,7 @@ public interface EventService {
     Event addEvent(Event event);
     Event updateEvent(Long id, Event event);
     void deleteEvent(Long id);
+    List<Event> getEventsByOrganizer(Long organizerId);
+    // TODO: Implement method to get events by organizer
+    // TODO: Implement method to check if a user is the organizer of an event
 }
