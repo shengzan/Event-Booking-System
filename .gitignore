@@ -30,3 +30,42 @@ replay_pid*
 
 # ClassDiagram.txt
 # UseCases.txt
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# STS (Spring Tool Suite)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+# VS Code
+.vscode/
+
+# Spring Boot
+*.properties
+!application.properties
+!application-*.properties
+
+# Logs
+logs/
+*.log
