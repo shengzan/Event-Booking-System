@@ -4,5 +4,6 @@ import com.example.eventbookingsystem.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    // Spring Data JPA will automatically implement basic CRUD operations
+    List<Ticket> findByEventId(Long eventId);
+    List<Ticket> findByUserId(Long userId);
 }
