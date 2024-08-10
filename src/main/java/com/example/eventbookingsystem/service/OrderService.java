@@ -10,9 +10,9 @@ public interface OrderService {
     Order getOrderById(Long id);
     List<Order> getOrdersByUser(User user);
     boolean isUserAuthorizedForOrder(User user, Long orderId);
-    
-    // TODO: Implement method to update order status
-    // TODO: Implement method to cancel an order
-    // TODO: Implement method to refund an order
-    // TODO: Implement method to get orders by status
+    List<Order> getAllOrders();
+    Order updateOrderStatus(Long id, String status);
+    Order cancelOrder(Long id);
+    Order refundOrder(Long id);
+    List<Order> getOrdersByStatus(String status);
 }
