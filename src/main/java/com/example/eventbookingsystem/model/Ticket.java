@@ -1,10 +1,6 @@
 package com.example.eventbookingsystem.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Ticket {
@@ -13,10 +9,20 @@ public class Ticket {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "event_id")
     private Event event;
 
-    private String customerName;
-    private String customerEmail;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    // TODO: Add getters, setters, and constructors
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    // TODO: Add getters and setters for all fields
+    // TODO: Add constructors (default and parameterized)
+    // TODO: Implement toString() method
+    // TODO: Implement equals() and hashCode() methods
+    // TODO: Add method to get ticket price from associated event
 }
