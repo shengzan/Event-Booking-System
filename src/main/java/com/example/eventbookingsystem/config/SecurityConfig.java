@@ -15,6 +15,11 @@ public class SecurityConfig {
         // TODO: Configure security rules
         // Allow all users to view events and order tickets
         // Restrict event creation, update, and deletion to Event Organizers
+        // Allow access to /api/users/register and /api/users/login endpoints
         return http.build();
     }
+
+    // TODO: Add password encoder bean
+
+    // TODO: Add authentication manager bean
 }
