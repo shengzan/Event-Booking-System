@@ -29,6 +29,16 @@ CREATE TABLE event (
     FOREIGN KEY (organizer_id) REFERENCES user(id)
 );
 
+-- Create Order table
+CREATE TABLE `order` (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT,
+    order_date DATETIME NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    CHECK (status IN ('PAID', 'REFUNDED', 'CANCELLED'))
+);
+
 -- Create Ticket table
 CREATE TABLE ticket (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -36,22 +46,8 @@ CREATE TABLE ticket (
     order_id BIGINT,
     seat_number INT,
     FOREIGN KEY (event_id) REFERENCES event(id),
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    FOREIGN KEY (order_id) REFERENCES `order`(id)
 );
-
--- Create Order table
-CREATE TABLE `order` (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT,
-    order_date DATETIME NOT NULL,
-    status VARCHAR(20) NOT NULL,
-    CHECK (status IN ('PAID', 'REFUNDED', 'CANCELLED'))
-);
-
--- Add foreign key constraint for order_id in Ticket table
-ALTER TABLE ticket
-ADD CONSTRAINT fk_ticket_order
-FOREIGN KEY (order_id) REFERENCES `order`(id);
 
 -- Create index for faster queries
 CREATE INDEX idx_event_date ON event(date);
