@@ -5,6 +5,7 @@ import com.example.eventbookingsystem.model.User;
 import com.example.eventbookingsystem.service.OrderService;
 import com.example.eventbookingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class OrderController {
             Order order = orderService.getOrderById(id);
             return order != null ? ResponseEntity.ok(order) : ResponseEntity.notFound().build();
         }
-        return ResponseEntity.forbidden().build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @GetMapping("/user")
@@ -52,7 +53,7 @@ public class OrderController {
             Order cancelledOrder = orderService.cancelOrder(id);
             return ResponseEntity.ok(cancelledOrder);
         }
-        return ResponseEntity.forbidden().build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PostMapping("/{id}/refund")
@@ -62,7 +63,7 @@ public class OrderController {
             Order refundedOrder = orderService.refundOrder(id);
             return ResponseEntity.ok(refundedOrder);
         }
-        return ResponseEntity.forbidden().build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @GetMapping("/status/{status}")
