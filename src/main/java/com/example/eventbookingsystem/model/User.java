@@ -55,6 +55,10 @@ public class User {
         USER, ADMIN, ORGANIZER
     }
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
+
     // Constructors
     public User() {}
 
