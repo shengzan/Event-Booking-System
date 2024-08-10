@@ -5,9 +5,12 @@ import com.example.eventbookingsystem.model.User;
 public interface UserService {
     User registerUser(User user);
     User getUserByUsername(String username);
+    User getUserByEmail(String email);
     boolean authenticateUser(String username, String password);
-    // TODO: Add method to check if a username is already taken
-    // TODO: Add method to check if an email is already registered
-    // TODO: Add method to update user details
-    // TODO: Add method to change user password
+    boolean isUsernameTaken(String username);
+    boolean isEmailRegistered(String email);
+    User updateUserDetails(User user);
+    boolean changeUserPassword(String username, String oldPassword, String newPassword);
+    List<User> getAllUsers();
+    void deleteUser(Long userId);
 }
