@@ -48,11 +48,14 @@
         </dependency>
     </dependencies>
     
-    <dependency>
-        <groupId>io.github.cdimascio</groupId>
-        <artifactId>dotenv-java</artifactId>
-        <version>2.3.1</version>
-    </dependency>
+    <dependencies>
+        <!-- Other dependencies -->
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
