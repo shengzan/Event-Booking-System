@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrdersByStatus(String status) {
-        return orderRepository.findByStatus(Order.OrderStatus.valueOf(status.toUpperCase()));
+    public List<Order> getOrdersByStatus(Order.OrderStatus status) {
+        return orderRepository.findByStatus(status);
     }
 }

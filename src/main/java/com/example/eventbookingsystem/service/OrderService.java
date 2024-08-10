@@ -14,5 +14,5 @@ public interface OrderService {
     Order updateOrderStatus(Long id, String status);
     Order cancelOrder(Long id);
     Order refundOrder(Long id);
-    List<Order> getOrdersByStatus(String status);
+    List<Order> getOrdersByStatus(Order.OrderStatus status);
 }
