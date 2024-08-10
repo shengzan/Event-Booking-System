@@ -12,8 +12,14 @@ public class User {
     private String password;
     private String email;
     private String role;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
 
-    // TODO: Add getters, setters, and constructors
-    // TODO: Add validation annotations for username, password, and email
-    // TODO: Add a method to check if the user is an Event Organizer
+    // TODO: Add getters and setters for all fields
+    // TODO: Add constructors (default and parameterized)
+    // TODO: Add validation annotations for username, password, email, firstName, lastName, and phoneNumber
+    // TODO: Implement a method to check if the user is an Event Organizer
+    // TODO: Implement toString() method
+    // TODO: Implement equals() and hashCode() methods
 }
