@@ -1,6 +1,7 @@
 package com.example.eventbookingsystem.service;
 
 import com.example.eventbookingsystem.model.User;
+import java.util.List;
 
 public interface UserService {
     User registerUser(User user);
