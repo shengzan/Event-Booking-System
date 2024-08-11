@@ -1,5 +1,5 @@
 -- Drop tables if they exist
-DROP TABLE IF EXISTS `order`;
+DROP TABLE IF EXISTS order;
 DROP TABLE IF EXISTS ticket;
 DROP TABLE IF EXISTS event;
 DROP TABLE IF EXISTS user;
