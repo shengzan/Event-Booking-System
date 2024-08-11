@@ -13,7 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
@@ -52,12 +51,5 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/**")
-            .allowCredentials(true)
-            .allowedOriginPatterns("*") 
-            .allowedMethods(new String[]{"GET", "POST", "PUT", "DELETE"})
-            .allowedHeaders("*")
-            .exposedHeaders("*");
-    }
+    // Remove the JwtTokenProvider bean as it's now injected via constructor
 }
