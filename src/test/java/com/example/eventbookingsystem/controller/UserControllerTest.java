@@ -40,7 +40,8 @@ class UserControllerTest {
         User user = new User();
         user.setUsername("testuser");
         user.setEmail("test@example.com");
-        user.setPassword("password123");
+        user.setPassword("123456");
+        user.setRole(User.UserRole.ORGANIZER);
 
         when(userService.isUsernameTaken("testuser")).thenReturn(false);
         when(userService.isEmailRegistered("test@example.com")).thenReturn(false);
