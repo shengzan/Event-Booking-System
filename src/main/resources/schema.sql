@@ -13,7 +13,8 @@ CREATE TABLE user (
     role VARCHAR(20) NOT NULL,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
-    phone_number VARCHAR(20)
+    phone_number VARCHAR(20),
+    UNIQUE KEY user_unique (username, email)
 );
 
 -- Create Event table
@@ -26,7 +27,8 @@ CREATE TABLE event (
     location VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     organizer_id BIGINT,
-    FOREIGN KEY (organizer_id) REFERENCES user(id)
+    FOREIGN KEY (organizer_id) REFERENCES user(id),
+    UNIQUE KEY event_unique (name, date, organizer_id)
 );
 
 -- Create Order table
@@ -36,7 +38,8 @@ CREATE TABLE `order` (
     order_date DATETIME NOT NULL,
     status VARCHAR(20) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user(id),
-    CHECK (status IN ('PAID', 'REFUNDED', 'CANCELLED'))
+    CHECK (status IN ('PAID', 'REFUNDED', 'CANCELLED')),
+    UNIQUE KEY order_unique (user_id, order_date)
 );
 
 -- Create Ticket table
@@ -46,7 +49,8 @@ CREATE TABLE ticket (
     order_id BIGINT,
     seat_number INT,
     FOREIGN KEY (event_id) REFERENCES event(id),
-    FOREIGN KEY (order_id) REFERENCES `order`(id)
+    FOREIGN KEY (order_id) REFERENCES `order`(id),
+    UNIQUE KEY ticket_unique (event_id, order_id, seat_number)
 );
 
 -- Create index for faster queries
