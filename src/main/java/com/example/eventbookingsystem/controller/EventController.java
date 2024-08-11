@@ -28,7 +28,7 @@ public class EventController {
         this.userService = userService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Event>> getAllEvents() {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
