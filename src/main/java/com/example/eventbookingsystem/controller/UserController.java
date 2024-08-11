@@ -43,10 +43,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtTokenProvider.createToken(username);
