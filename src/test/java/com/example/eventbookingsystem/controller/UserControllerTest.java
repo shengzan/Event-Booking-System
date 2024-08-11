@@ -47,16 +47,6 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testLoginUser() throws Exception {
-        when(jwtTokenProvider.createToken(anyString())).thenReturn("testtoken");
-
-        mockMvc.perform(post("/api/users/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\":\"testuser\", \"password\":\"testpassword\"}"))
-                .andExpect(status().isOk())
-                .andExpect(header().string("Authorization", "Bearer testtoken"));
-    }
-    @Test
     public void testRegisterUser() throws Exception {
         when(userService.isUsernameTaken("testuser")).thenReturn(false);
         when(userService.isEmailRegistered("testuser@example.com")).thenReturn(false);
@@ -66,5 +56,16 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\":\"testuser\", \"password\":\"123456\", \"email\":\"testuser@example.com\"}"))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testLoginUser() throws Exception {
+        when(jwtTokenProvider.createToken(anyString())).thenReturn("testtoken");
+
+        mockMvc.perform(post("/api/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"testuser\", \"password\":\"testpassword\"}"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Authorization", "Bearer testtoken"));
     }
 }
