@@ -1,6 +1,7 @@
 package com.example.eventbookingsystem.controller;
 
 import com.example.eventbookingsystem.model.User;
+import com.example.eventbookingsystem.dto.LoginRequest;
 import com.example.eventbookingsystem.service.UserService;
 import com.example.eventbookingsystem.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
@@ -43,15 +48,18 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
+        logger.info("Login attempt for user: {}", loginRequest.getUsername());
         try {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtTokenProvider.createToken(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername());
+            logger.info("User {} successfully authenticated", loginRequest.getUsername());
             return ResponseEntity.ok().header("Authorization", "Bearer " + token).body("User authenticated successfully");
         } catch (AuthenticationException e) {
+            logger.error("Authentication failed for user: {}", loginRequest.getUsername(), e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }

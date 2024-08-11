@@ -106,7 +106,7 @@ class UserControllerTest {
     @Test
     void testLoginUser_Success() {
         // Arrange
-        User loginRequest = new User();
+        LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("testuser");
         loginRequest.setPassword("password123");
 
@@ -133,7 +133,7 @@ class UserControllerTest {
     @Test
     void testLoginUser_Failure() {
         // Arrange
-        User loginRequest = new User();
+        LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("testuser");
         loginRequest.setPassword("wrongpassword");
 
