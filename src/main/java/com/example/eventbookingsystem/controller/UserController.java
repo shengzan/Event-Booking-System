@@ -57,13 +57,13 @@ public class UserController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtTokenProvider.createToken(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername());
             logger.info("User {} successfully authenticated", loginRequest.getUsername());
-            return ResponseEntity.ok().body(new LoginResponse(token, "User authenticated successfully"));
+            return ResponseEntity.ok()
+                .header("Authorization", "Bearer " + token)
+                .body("User authenticated successfully");
         } catch (AuthenticationException e) {
             logger.error("Authentication failed for user: {}", loginRequest.getUsername(), e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-        } catch (Exception e) {
-            logger.error("Unexpected error during authentication for user: {}", loginRequest.getUsername(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Invalid username or password");
         }
     }
 
