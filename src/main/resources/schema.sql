@@ -24,6 +24,7 @@ CREATE TABLE event (
     description TEXT,
     date DATE NOT NULL,
     capacity INT NOT NULL,
+    available_capacity INT NOT NULL,
     location VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     organizer_id BIGINT,

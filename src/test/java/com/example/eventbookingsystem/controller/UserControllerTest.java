@@ -1,5 +1,6 @@
 package com.example.eventbookingsystem.controller;
 
+import com.example.eventbookingsystem.dto.LoginRequest;
 import com.example.eventbookingsystem.model.User;
 import com.example.eventbookingsystem.service.UserService;
 import com.example.eventbookingsystem.security.JwtTokenProvider;

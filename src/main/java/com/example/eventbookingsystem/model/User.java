@@ -32,7 +32,11 @@ public class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
-
+    
+    public enum UserRole {
+        USER, ADMIN, ORGANIZER
+    }
+    
     @Size(max = 50, message = "First name must be at most 50 characters")
     @Column(name = "first_name")
     private String firstName;
@@ -51,13 +55,6 @@ public class User {
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL)
     private List<Event> organizedEvents = new ArrayList<>();
 
-    public enum UserRole {
-        USER, ADMIN, ORGANIZER
-    }
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role;
 
     // Constructors
     public User() {}
