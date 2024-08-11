@@ -50,8 +50,5 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public JwtTokenProvider jwtTokenProvider() {
-        return new JwtTokenProvider();
-    }
+    // Remove the JwtTokenProvider bean as it's now injected via constructor
 }
