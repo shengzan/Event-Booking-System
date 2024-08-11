@@ -13,11 +13,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // TODO: Configure security rules
-        // Allow all users to view events and order tickets
-        // Restrict event creation, update, and deletion to Event Organizers
-        // Allow access to /api/users/register and /api/users/login endpoints
-        // Secure all other endpoints
+        http
+            .csrf().disable()
+            .authorizeRequests()
+                .requestMatchers("/api/events/**").permitAll()
+                .anyRequest().authenticated()
+            .and()
+            .httpBasic();
         return http.build();
     }
 
