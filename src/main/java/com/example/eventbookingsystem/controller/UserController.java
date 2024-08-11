@@ -61,6 +61,9 @@ public class UserController {
         } catch (AuthenticationException e) {
             logger.error("Authentication failed for user: {}", loginRequest.getUsername(), e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        } catch (Exception e) {
+            logger.error("Unexpected error during authentication for user: {}", loginRequest.getUsername(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
 

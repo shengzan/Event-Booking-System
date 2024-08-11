@@ -42,10 +42,14 @@ public class SecurityConfig {
                 corsConfiguration.setAllowedHeaders(java.util.List.of("*"));
                 return corsConfiguration;
             }))
-            .addFilter(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtTokenProvider))
             .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+        return new JwtAuthenticationFilter(authenticationManager(null), jwtTokenProvider);
     }
 
     @Bean
