@@ -17,9 +17,7 @@ import java.util.List;
 @RequestMapping("/api/events")
 public class EventController {
 
-    @Autowired
-    private EventService eventService;
-
+    private final EventService eventService;
     private final UserService userService;
 
     @Autowired
@@ -30,7 +28,13 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<List<Event>> getAllEvents() {
-        return ResponseEntity.ok(eventService.getAllEvents());
+        try {
+            List<Event> events = eventService.getAllEvents();
+            return ResponseEntity.ok(events);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/{id}")

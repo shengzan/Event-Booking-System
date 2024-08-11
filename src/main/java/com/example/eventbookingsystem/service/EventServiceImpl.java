@@ -20,7 +20,15 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+        try {
+            List<Event> events = eventRepository.findAll();
+            System.out.println("Retrieved " + events.size() + " events");
+            return events;
+        } catch (Exception e) {
+            System.err.println("Error retrieving events: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Override
