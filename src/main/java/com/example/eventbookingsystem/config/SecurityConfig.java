@@ -19,10 +19,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
     private UserDetailsService userDetailsService;
 
     @Bean
