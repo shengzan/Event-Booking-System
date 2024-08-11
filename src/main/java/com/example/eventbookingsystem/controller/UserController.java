@@ -2,33 +2,58 @@ package com.example.eventbookingsystem.controller;
 
 import com.example.eventbookingsystem.model.User;
 import com.example.eventbookingsystem.service.UserService;
+import com.example.eventbookingsystem.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
+    private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+        this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user) {
+        if (userService.isUsernameTaken(user.getUsername())) {
+            return ResponseEntity.badRequest().body("Username is already taken");
+        }
+        if (userService.isEmailRegistered(user.getEmail())) {
+            return ResponseEntity.badRequest().body("Email is already registered");
+        }
         User registeredUser = userService.registerUser(user);
-        return ResponseEntity.ok(registeredUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestParam String username, @RequestParam String password) {
-        boolean isAuthenticated = userService.authenticateUser(username, password);
-        if (isAuthenticated) {
-            // In a real application, you would generate and return a JWT token here
-            return ResponseEntity.ok("User authenticated successfully");
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = jwtTokenProvider.createToken(username);
+            return ResponseEntity.ok().header("Authorization", "Bearer " + token).body("User authenticated successfully");
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-        return ResponseEntity.badRequest().body("Invalid username or password");
     }
 
     @GetMapping("/profile")
@@ -41,12 +66,12 @@ public class UserController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<?> updateUserProfile(@RequestBody User user, Authentication authentication) {
-        if (user.getUsername().equals(authentication.getName())) {
-            User updatedUser = userService.updateUserDetails(user);
-            return ResponseEntity.ok(updatedUser);
+    public ResponseEntity<?> updateUserProfile(@Valid @RequestBody User user, Authentication authentication) {
+        if (!user.getUsername().equals(authentication.getName())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only update your own profile");
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        User updatedUser = userService.updateUserDetails(user);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @PostMapping("/change-password")
