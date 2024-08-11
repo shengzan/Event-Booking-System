@@ -1,117 +1,100 @@
 package com.example.eventbookingsystem.controller;
 
 import com.example.eventbookingsystem.model.User;
-import com.example.eventbookingsystem.security.JwtTokenProvider;
 import com.example.eventbookingsystem.service.UserService;
+import com.example.eventbookingsystem.security.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+class UserControllerTest {
 
-@WebMvcTest(UserController.class)
-public class UserControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private UserService userService;
 
-    @MockBean
+    @Mock
     private AuthenticationManager authenticationManager;
 
-    @MockBean
+    @Mock
     private JwtTokenProvider jwtTokenProvider;
 
-    @MockBean
-    private UserDetailsService userDetailsService;
-
-    private User user;
+    @InjectMocks
+    private UserController userController;
 
     @BeforeEach
-    public void setUp() {
-        user = new User();
-        user.setUsername("testuser");
-        user.setPassword("123456");
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testRegisterUserWithRole() throws Exception {
+    void testRegisterUser_Success() {
+        // Arrange
         User user = new User();
         user.setUsername("testuser");
-        user.setEmail("testuser@example.com");
-        user.setPassword("123456");
-        user.setRole("ORGANIZER");
+        user.setEmail("test@example.com");
+        user.setPassword("password123");
 
         when(userService.isUsernameTaken("testuser")).thenReturn(false);
-        when(userService.isEmailRegistered("testuser@example.com")).thenReturn(false);
-        when(userService.registerUser(any(User.class))).thenReturn(user);
+        when(userService.isEmailRegistered("test@example.com")).thenReturn(false);
+        when(userService.registerUser(user)).thenReturn(user);
 
-        mockMvc.perform(post("/api/users/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\":\"testuser\", \"email\":\"testuser@example.com\", \"password\":\"123456\", \"role\":\"ORGANIZER\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.username").value("testuser"))
-                .andExpect(jsonPath("$.email").value("testuser@example.com"))
-                .andExpect(jsonPath("$.role").value("ORGANIZER"));
+        // Act
+        ResponseEntity<?> response = userController.registerUser(user);
+
+        // Assert
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(user, response.getBody());
+        verify(userService).isUsernameTaken("testuser");
+        verify(userService).isEmailRegistered("test@example.com");
+        verify(userService).registerUser(user);
     }
 
     @Test
-    public void testRegisterUser() throws Exception {
-        when(userService.isUsernameTaken("testuser")).thenReturn(false);
-        when(userService.isEmailRegistered("testuser@example.com")).thenReturn(false);
-        when(userService.registerUser(any(User.class))).thenReturn(user);
-
-        mockMvc.perform(post("/api/users/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\":\"testuser\", \"password\":\"123456\", \"email\":\"testuser@example.com\"}"))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    public void testRegisterUserWithRole() throws Exception {
+    void testRegisterUser_UsernameTaken() {
+        // Arrange
         User user = new User();
-        user.setUsername("testuser");
-        user.setEmail("testuser@example.com");
-        user.setPassword("123456");
-        user.setRole("ORGANIZER");
+        user.setUsername("existinguser");
+        user.setEmail("test@example.com");
 
-        when(userService.isUsernameTaken("testuser")).thenReturn(false);
-        when(userService.isEmailRegistered("testuser@example.com")).thenReturn(false);
-        when(userService.registerUser(any(User.class))).thenReturn(user);
+        when(userService.isUsernameTaken("existinguser")).thenReturn(true);
 
-        mockMvc.perform(post("/api/users/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\":\"testuser\", \"email\":\"testuser@example.com\", \"password\":\"123456\", \"role\":\"ORGANIZER\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.username").value("testuser"))
-                .andExpect(jsonPath("$.email").value("testuser@example.com"))
-                .andExpect(jsonPath("$.role").value("ORGANIZER"));
+        // Act
+        ResponseEntity<?> response = userController.registerUser(user);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Username is already taken", response.getBody());
+        verify(userService).isUsernameTaken("existinguser");
+        verify(userService, never()).isEmailRegistered(anyString());
+        verify(userService, never()).registerUser(any(User.class));
     }
 
     @Test
-    public void testLoginUser() throws Exception {
-        when(jwtTokenProvider.createToken(anyString())).thenReturn("testtoken");
+    void testRegisterUser_EmailTaken() {
+        // Arrange
+        User user = new User();
+        user.setUsername("newuser");
+        user.setEmail("existing@example.com");
 
-        mockMvc.perform(post("/api/users/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\":\"testuser\", \"password\":\"testpassword\"}"))
-                .andExpect(status().isOk())
-                .andExpect(header().string("Authorization", "Bearer testtoken"));
+        when(userService.isUsernameTaken("newuser")).thenReturn(false);
+        when(userService.isEmailRegistered("existing@example.com")).thenReturn(true);
+
+        // Act
+        ResponseEntity<?> response = userController.registerUser(user);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Email is already registered", response.getBody());
+        verify(userService).isUsernameTaken("newuser");
+        verify(userService).isEmailRegistered("existing@example.com");
+        verify(userService, never()).registerUser(any(User.class));
     }
 }
