@@ -1,6 +1,5 @@
 package com.example.eventbookingsystem.config;
 
-import com.example.eventbookingsystem.security.JwtAuthenticationFilter;
 import com.example.eventbookingsystem.security.JwtAuthorizationFilter;
 import com.example.eventbookingsystem.security.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
@@ -42,7 +41,6 @@ public class SecurityConfig {
                 corsConfiguration.setAllowedHeaders(java.util.List.of("*"));
                 return corsConfiguration;
             }))
-            .addFilter(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtTokenProvider))
             .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
