@@ -13,7 +13,7 @@ VALUES
 ('Summer Music Festival', 'A weekend of great music and fun', '2023-07-15', 1000, 'Central Park', 50.00, 2),
 ('Tech Conference 2023', 'Learn about the latest in technology', '2023-09-20', 500, 'Convention Center', 100.00, 2),
 ('Food and Wine Expo', 'Taste cuisines from around the world', '2023-08-05', 300, 'City Hall', 75.00, 2)
-ON DUPLICATE KEY UPDATE description=VALUES(description), capacity=VALUES(capacity), price=VALUES(price);
+ON DUPLICATE KEY UPDATE description=VALUES(description), capacity=VALUES(capacity), price=VALUES(price), location=VALUES(location);
 
 -- Insert sample orders
 INSERT INTO `order` (user_id, order_date, status)
