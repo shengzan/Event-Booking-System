@@ -43,7 +43,7 @@ public class UserControllerTest {
     public void setUp() {
         user = new User();
         user.setUsername("testuser");
-        user.setPassword("testpassword");
+        user.setPassword("123456");
     }
 
     @Test
