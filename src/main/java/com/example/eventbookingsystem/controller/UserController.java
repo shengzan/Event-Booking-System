@@ -49,7 +49,7 @@ public class UserController {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = jwtTokenProvider.createToken(username);
+            String token = jwtTokenProvider.createToken(loginRequest.getUsername());
             return ResponseEntity.ok().header("Authorization", "Bearer " + token).body("User authenticated successfully");
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
