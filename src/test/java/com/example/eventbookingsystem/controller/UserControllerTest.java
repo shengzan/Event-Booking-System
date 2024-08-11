@@ -56,4 +56,15 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(header().string("Authorization", "Bearer testtoken"));
     }
+    @Test
+    public void testRegisterUser() throws Exception {
+        when(userService.isUsernameTaken("testuser")).thenReturn(false);
+        when(userService.isEmailRegistered("testuser@example.com")).thenReturn(false);
+        when(userService.registerUser(any(User.class))).thenReturn(user);
+
+        mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"testuser\", \"password\":\"123456\", \"email\":\"testuser@example.com\"}"))
+                .andExpect(status().isCreated());
+    }
 }
