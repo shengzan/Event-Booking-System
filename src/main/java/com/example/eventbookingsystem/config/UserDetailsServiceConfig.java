@@ -10,27 +10,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 @Configuration
 public class UserDetailsServiceConfig {
 
-    private final UserService userService;
-
-    public UserDetailsServiceConfig(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private UserService userService;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                com.example.eventbookingsystem.model.User user = userService.getUserByUsername(username);
-                if (user == null) {
-                    throw new UsernameNotFoundException("User not found");
-                }
-                return org.springframework.security.core.userdetails.User
-                    .withUsername(user.getUsername())
-                    .password(user.getPassword())
-                    .roles("USER")
-                    .build();
+        return username -> {
+            com.example.eventbookingsystem.model.User user = userService.getUserByUsername(username);
+            if (user == null) {
+                throw new UsernameNotFoundException("User not found");
             }
+            return org.springframework.security.core.userdetails.User
+                .withUsername(user.getUsername())
+                .password(user.getPassword())
+                .roles("USER")
+                .build();
         };
     }
 }
