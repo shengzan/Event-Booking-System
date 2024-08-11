@@ -11,6 +11,7 @@ public class EventBookingSystemApplication {
         Dotenv dotenv = Dotenv.load();
         System.setProperty("MYSQL_USERNAME", dotenv.get("MYSQL_USERNAME"));
         System.setProperty("MYSQL_PASSWORD", dotenv.get("MYSQL_PASSWORD"));
+        System.setProperty("JWT_SECRET_KEY", dotenv.get("security.jwt.token.secret-key"));
         SpringApplication.run(EventBookingSystemApplication.class, args);
     }
 }
