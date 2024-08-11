@@ -23,14 +23,10 @@ public class JwtTokenProvider {
     private long validityInMilliseconds = 3600000; // 1h
 
     private final UserDetailsService userDetailsService;
-    private Key key;
+    private final Key key;
 
-    public JwtTokenProvider(UserDetailsService userDetailsService) {
+    public JwtTokenProvider(UserDetailsService userDetailsService, @Value("${security.jwt.token.secret-key:secret}") String secretKey) {
         this.userDetailsService = userDetailsService;
-    }
-
-    @PostConstruct
-    protected void init() {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
