@@ -46,9 +46,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-    </dependencies>
-    
-    <dependencies>
+
         <!-- Other dependencies -->
         <dependency>
             <groupId>io.github.cdimascio</groupId>
@@ -56,6 +54,9 @@
             <version>2.3.1</version>
         </dependency>
     </dependencies>
+    
+
+
 
     <build>
         <plugins>
