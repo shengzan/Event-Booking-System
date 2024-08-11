@@ -21,9 +21,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserDetailsService userDetailsService;
 
-    private UserDetailsService userDetailsService;
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,7 +47,8 @@ public class SecurityConfig {
                 return corsConfiguration;
             }))
             .addFilter(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtTokenProvider))
-            .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+            .userDetailsService(userDetailsService);
 
         return http.build();
     }
