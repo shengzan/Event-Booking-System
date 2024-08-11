@@ -1,0 +1,96 @@
+package com.example.eventbookingsystem.controller;
+
+import com.example.eventbookingsystem.model.User;
+import com.example.eventbookingsystem.security.JwtTokenProvider;
+import com.example.eventbookingsystem.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+@WebMvcTest(UserController.class)
+public class UserControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private AuthenticationManager authenticationManager;
+
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
+
+    @MockBean
+    private UserDetailsService userDetailsService;
+
+    private User user;
+
+    @BeforeEach
+    public void setUp() {
+        user = new User();
+        user.setUsername("testuser");
+        user.setPassword("123456");
+    }
+
+    @Test
+    public void testRegisterUser() throws Exception {
+        when(userService.isUsernameTaken("testuser")).thenReturn(false);
+        when(userService.isEmailRegistered("testuser@example.com")).thenReturn(false);
+        when(userService.registerUser(any(User.class))).thenReturn(user);
+
+        mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"testuser\", \"password\":\"123456\", \"email\":\"testuser@example.com\"}"))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testRegisterUserWithRole() throws Exception {
+        User user = new User();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
+        user.setPassword("123456");
+        user.setRole("ORGANIZER");
+
+        when(userService.isUsernameTaken("testuser")).thenReturn(false);
+        when(userService.isEmailRegistered("testuser@example.com")).thenReturn(false);
+        when(userService.registerUser(any(User.class))).thenReturn(user);
+
+        mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"testuser\", \"email\":\"testuser@example.com\", \"password\":\"123456\", \"role\":\"ORGANIZER\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.username").value("testuser"))
+                .andExpect(jsonPath("$.email").value("testuser@example.com"))
+                .andExpect(jsonPath("$.role").value("ORGANIZER"));
+    }
+
+    @Test
+    public void testLoginUser() throws Exception {
+        when(jwtTokenProvider.createToken(anyString())).thenReturn("testtoken");
+
+        mockMvc.perform(post("/api/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"testuser\", \"password\":\"testpassword\"}"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Authorization", "Bearer testtoken"));
+    }
+}
