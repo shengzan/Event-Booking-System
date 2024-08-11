@@ -20,14 +20,18 @@ public class JwtTokenProvider {
     private String secretKey;
 
     @Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 3600000; // 1h
+    private long validityInMilliseconds; // 1h
 
     private final UserDetailsService userDetailsService;
-    private final Key key;
+    private Key key;
 
-    public JwtTokenProvider(UserDetailsService userDetailsService, @Value("${security.jwt.token.secret-key:secret}") String secretKey) {
+    public JwtTokenProvider(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
-        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
+
+    @PostConstruct
+    protected void init() {
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
     public String createToken(String username) {
