@@ -51,6 +51,27 @@ public class UserControllerTest {
     }
 
     @Test
+    public void testRegisterUserWithRole() throws Exception {
+        User user = new User();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
+        user.setPassword("123456");
+        user.setRole("ORGANIZER");
+
+        when(userService.isUsernameTaken("testuser")).thenReturn(false);
+        when(userService.isEmailRegistered("testuser@example.com")).thenReturn(false);
+        when(userService.registerUser(any(User.class))).thenReturn(user);
+
+        mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"testuser\", \"email\":\"testuser@example.com\", \"password\":\"123456\", \"role\":\"ORGANIZER\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.username").value("testuser"))
+                .andExpect(jsonPath("$.email").value("testuser@example.com"))
+                .andExpect(jsonPath("$.role").value("ORGANIZER"));
+    }
+
+    @Test
     public void testRegisterUser() throws Exception {
         when(userService.isUsernameTaken("testuser")).thenReturn(false);
         when(userService.isEmailRegistered("testuser@example.com")).thenReturn(false);
