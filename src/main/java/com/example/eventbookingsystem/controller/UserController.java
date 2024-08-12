@@ -69,6 +69,9 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        }
         User user = userService.getUserByUsername(authentication.getName());
         if (user != null) {
             return ResponseEntity.ok(user);
