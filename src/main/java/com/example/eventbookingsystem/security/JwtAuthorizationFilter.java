@@ -25,17 +25,25 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = resolveToken(request);
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            Authentication auth = jwtTokenProvider.getAuthentication(token);
-            if (auth != null) {
-                SecurityContextHolder.getContext().setAuthentication(auth);
-                logger.info("Set Authentication to security context for '{}', uri: {}", auth.getName(), request.getRequestURI());
+        try {
+            String token = resolveToken(request);
+            if (token != null) {
+                if (jwtTokenProvider.validateToken(token)) {
+                    Authentication auth = jwtTokenProvider.getAuthentication(token);
+                    if (auth != null) {
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                        logger.info("Set Authentication to security context for '{}', uri: {}", auth.getName(), request.getRequestURI());
+                    } else {
+                        logger.error("Failed to get Authentication from token");
+                    }
+                } else {
+                    logger.warn("Invalid JWT token");
+                }
             } else {
-                logger.warn("Couldn't set user authentication in security context");
+                logger.debug("No JWT token found in request headers");
             }
-        } else {
-            logger.debug("No valid JWT token found, uri: {}", request.getRequestURI());
+        } catch (Exception ex) {
+            logger.error("Could not set user authentication in security context", ex);
         }
 
         filterChain.doFilter(request, response);
