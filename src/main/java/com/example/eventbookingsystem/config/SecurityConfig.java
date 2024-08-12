@@ -25,11 +25,6 @@ import org.springframework.web.cors.CorsConfiguration;
 public class SecurityConfig {
 
     private JwtTokenProvider jwtTokenProvider;
-    private final UserService userService;
-
-    public SecurityConfig(UserService userService) {
-        this.userService = userService;
-    }
 
     @Autowired
     public void setJwtTokenProvider(JwtTokenProvider jwtTokenProvider) {
@@ -37,7 +32,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(UserService userService) {
         return username -> {
             User user = userService.getUserByUsername(username);
             if (user == null) {
