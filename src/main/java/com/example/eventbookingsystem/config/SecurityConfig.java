@@ -32,7 +32,6 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/events/**").permitAll()
                 .requestMatchers("/api/users/register", "/api/users/login").permitAll()
-                .requestMatchers("/api/users/profile").authenticated()
                 .anyRequest().authenticated()
             )
             .cors(cors -> cors.configurationSource(request -> {

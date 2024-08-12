@@ -69,13 +69,16 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(Authentication authentication) {
-        if (authentication == null) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            logger.warn("Attempt to access profile without authentication");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         }
+        logger.info("Fetching profile for user: {}", authentication.getName());
         User user = userService.getUserByUsername(authentication.getName());
         if (user != null) {
             return ResponseEntity.ok(user);
         }
+        logger.warn("User not found for authenticated username: {}", authentication.getName());
         return ResponseEntity.notFound().build();
     }
 
