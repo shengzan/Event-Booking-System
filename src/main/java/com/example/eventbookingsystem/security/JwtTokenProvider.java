@@ -2,8 +2,6 @@ package com.example.eventbookingsystem.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,7 +16,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${JWT_SECRET_KEY}")
+    @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey;
 
     @Value("${security.jwt.token.expire-length:86400000}")
@@ -30,10 +28,7 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        if (secretKey == null) {
-            throw new IllegalStateException("JWT_SECRET_KEY environment variable is not set");
-        }
-        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
     public String createToken(String username) {
@@ -45,7 +40,7 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(key, SignatureAlgorithm.HS256)
+                .signWith(key)
                 .compact();
     }
 
