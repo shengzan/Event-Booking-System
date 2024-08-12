@@ -26,9 +26,6 @@ public class JwtTokenProvider {
 
     private Key key;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
     @PostConstruct
     protected void init() {
         this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
@@ -45,15 +42,6 @@ public class JwtTokenProvider {
                 .setExpiration(validity)
                 .signWith(key)
                 .compact();
-    }
-
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = getUserDetails(getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
-
-    private UserDetails getUserDetails(String username) {
-        return userDetailsService.loadUserByUsername(username);
     }
 
     public String getUsername(String token) {

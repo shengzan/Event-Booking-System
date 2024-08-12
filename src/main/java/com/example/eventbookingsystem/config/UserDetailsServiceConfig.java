@@ -17,19 +17,4 @@ public class UserDetailsServiceConfig {
     public UserDetailsServiceConfig(UserService userService) {
         this.userService = userService;
     }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> {
-            com.example.eventbookingsystem.model.User user = userService.getUserByUsername(username);
-            if (user == null) {
-                throw new UsernameNotFoundException("User not found");
-            }
-            return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
-                .password(user.getPassword())
-                .roles(user.getRole().name())
-                .build();
-        };
-    }
 }
