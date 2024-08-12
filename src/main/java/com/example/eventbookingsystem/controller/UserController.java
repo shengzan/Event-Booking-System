@@ -74,13 +74,14 @@ public class UserController {
             logger.warn("Attempt to access profile without authentication");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         }
-        logger.info("Fetching profile for user: {}", authentication.getName());
-        User user = userService.getUserByUsername(authentication.getName());
+        String username = authentication.getName();
+        logger.info("Fetching profile for user: {}", username);
+        User user = userService.getUserByUsername(username);
         if (user != null) {
             UserProfileDTO profileDTO = new UserProfileDTO(user);
             return ResponseEntity.ok(profileDTO);
         }
-        logger.warn("User not found for authenticated username: {}", authentication.getName());
+        logger.warn("User not found for authenticated username: {}", username);
         return ResponseEntity.notFound().build();
     }
 

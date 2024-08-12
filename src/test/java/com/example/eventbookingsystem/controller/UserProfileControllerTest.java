@@ -62,8 +62,8 @@ class UserProfileControllerTest {
         assertEquals(user.getLastName(), profileDTO.getLastName());
         assertEquals(user.getPhoneNumber(), profileDTO.getPhoneNumber());
 
-        verify(authentication).getName();
-        verify(userService).getUserByUsername(username);
+        verify(authentication, times(1)).getName();
+        verify(userService, times(1)).getUserByUsername(username);
     }
 
     @Test
