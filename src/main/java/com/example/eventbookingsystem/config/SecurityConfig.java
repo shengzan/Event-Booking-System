@@ -24,15 +24,8 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserService userService;
-
-    @Autowired
-    public SecurityConfig(UserService userService) {
-        this.userService = userService;
-    }
-
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(UserService userService) {
         return username -> {
             User user = userService.getUserByUsername(username);
             if (user == null) {
