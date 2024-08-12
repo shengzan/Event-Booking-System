@@ -5,6 +5,7 @@ import com.example.eventbookingsystem.security.JwtAuthorizationFilter;
 import com.example.eventbookingsystem.security.JwtTokenProvider;
 import com.example.eventbookingsystem.service.UserService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
