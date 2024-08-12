@@ -87,16 +87,16 @@ class UserProfileControllerTest {
     @Test
     void testGetUserProfile_Unauthenticated() {
         // Arrange
-        when(authentication.isAuthenticated()).thenReturn(false);
+        Authentication nullAuthentication = null;
 
         // Act
-        ResponseEntity<?> response = userController.getUserProfile(authentication);
+        ResponseEntity<?> response = userController.getUserProfile(nullAuthentication);
 
         // Assert
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertEquals("User not authenticated", response.getBody());
 
-        verify(authentication).isAuthenticated();
-        verifyNoMoreInteractions(userService);
+        verifyNoInteractions(authentication);
+        verifyNoInteractions(userService);
     }
 }

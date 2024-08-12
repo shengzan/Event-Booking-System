@@ -70,7 +70,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
+        if (authentication == null) {
             logger.warn("Attempt to access profile without authentication");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         }
