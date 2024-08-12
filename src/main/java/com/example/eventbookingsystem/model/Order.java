@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "`order`")
@@ -15,6 +16,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @Column(name = "order_date", nullable = false)

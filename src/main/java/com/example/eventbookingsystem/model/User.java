@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "user")
@@ -50,9 +51,11 @@ public class User {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Event> organizedEvents = new ArrayList<>();
 
 
