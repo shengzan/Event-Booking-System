@@ -1,7 +1,10 @@
 package com.example.eventbookingsystem.config;
 
+import com.example.eventbookingsystem.model.User;
 import com.example.eventbookingsystem.security.JwtAuthorizationFilter;
 import com.example.eventbookingsystem.security.JwtTokenProvider;
+import com.example.eventbookingsystem.service.UserService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,6 +12,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -19,9 +24,26 @@ import org.springframework.web.cors.CorsConfiguration;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
 
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return username -> {
+            User user = userService.getUserByUsername(username);
+            if (user == null) {
+                throw new UsernameNotFoundException("User not found");
+            }
+            return org.springframework.security.core.userdetails.User
+                    .withUsername(user.getUsername())
+                    .password(user.getPassword())
+                    .authorities("USER")
+                    .build();
+        };
     }
 
     @Bean
