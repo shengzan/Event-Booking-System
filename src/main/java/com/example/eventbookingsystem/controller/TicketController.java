@@ -16,11 +16,13 @@ import java.util.List;
 @RequestMapping("/api/tickets")
 public class TicketController {
 
-    @Autowired
-    private TicketService ticketService;
+    private final TicketService ticketService;
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
+    public TicketController(TicketService ticketService, UserService userService) {
+        this.ticketService = ticketService;
+        this.userService = userService;
+    }
 
     @PostMapping
     public ResponseEntity<Ticket> orderTicket(@RequestParam Long eventId, @RequestParam String customerName, @RequestParam String customerEmail, Authentication authentication) {
