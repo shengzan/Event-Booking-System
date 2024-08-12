@@ -25,12 +25,10 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
-    private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider, UserService userService, UserDetailsService userDetailsService) {
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
-        this.userDetailsService = userDetailsService;
     }
 
 

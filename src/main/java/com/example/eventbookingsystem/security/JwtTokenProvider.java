@@ -24,14 +24,10 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.expire-length:86400000}")
     private long validityInMilliseconds; // 24h
 
-    private final UserDetailsService userDetailsService;
-    
     private Key key;
 
     @Autowired
-    public JwtTokenProvider(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    private UserDetailsService userDetailsService;
 
     @PostConstruct
     protected void init() {
@@ -52,8 +48,12 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
+        UserDetails userDetails = getUserDetails(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    private UserDetails getUserDetails(String username) {
+        return userDetailsService.loadUserByUsername(username);
     }
 
     public String getUsername(String token) {
