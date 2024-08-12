@@ -15,7 +15,7 @@ import org.springframework.security.core.Authentication;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class UserControllerTest {
+class UserProfileControllerTest {
 
     @Mock
     private UserService userService;
