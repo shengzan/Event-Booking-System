@@ -2,6 +2,7 @@ package com.example.eventbookingsystem.controller;
 
 import com.example.eventbookingsystem.model.User;
 import com.example.eventbookingsystem.dto.LoginRequest;
+import com.example.eventbookingsystem.dto.UserProfileDTO;
 import com.example.eventbookingsystem.service.UserService;
 import com.example.eventbookingsystem.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +77,8 @@ public class UserController {
         logger.info("Fetching profile for user: {}", authentication.getName());
         User user = userService.getUserByUsername(authentication.getName());
         if (user != null) {
-            return ResponseEntity.ok(user);
+            UserProfileDTO profileDTO = new UserProfileDTO(user);
+            return ResponseEntity.ok(profileDTO);
         }
         logger.warn("User not found for authenticated username: {}", authentication.getName());
         return ResponseEntity.notFound().build();
