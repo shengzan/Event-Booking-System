@@ -26,12 +26,8 @@ public class JwtTokenProvider {
 
     private Key key;
 
-    private UserDetailsService userDetailsService;
-
     @Autowired
-    public void setUserDetailsService(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    private UserDetailsService userDetailsService;
 
     @PostConstruct
     protected void init() {

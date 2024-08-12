@@ -23,12 +23,16 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider, UserService userService) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public SecurityConfig(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setJwtTokenProvider(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Bean
