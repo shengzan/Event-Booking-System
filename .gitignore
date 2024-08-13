@@ -73,3 +73,6 @@ logs/
 *.log
 
 **/.DS_Store
+
+# HTTP client environment file
+http-client.env.json
