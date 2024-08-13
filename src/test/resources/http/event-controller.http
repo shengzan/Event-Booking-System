@@ -1,0 +1,43 @@
+### Get all events
+GET http://localhost:8080/api/events
+
+### Get event by ID
+GET http://localhost:8080/api/events/1
+
+### Create a new event
+POST http://localhost:8080/api/events
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "name": "Summer Music Festival",
+  "description": "A weekend of great music and fun",
+  "date": "2024-07-15T18:00:00",
+  "location": "Central Park",
+  "capacity": 5000,
+  "price": 49.99,
+  "category": "MUSIC"
+}
+
+### Update an event
+PUT http://localhost:8080/api/events/1
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "name": "Updated Summer Music Festival",
+  "description": "An updated weekend of great music and fun",
+  "date": "2024-07-16T18:00:00",
+  "location": "Central Park",
+  "capacity": 6000,
+  "price": 59.99,
+  "category": "MUSIC"
+}
+
+### Delete an event
+DELETE http://localhost:8080/api/events/1
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Get events by organizer
+GET http://localhost:8080/api/events/organizer/1
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
