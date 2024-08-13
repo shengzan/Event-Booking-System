@@ -75,4 +75,4 @@ logs/
 **/.DS_Store
 
 # HTTP client environment file
-http-client.env.json
+src/test/resources/http/http-client.env.json
