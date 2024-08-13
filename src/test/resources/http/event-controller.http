@@ -1,13 +1,13 @@
 ### Get all events
-GET http://localhost:8080/api/events
+GET {{host}}/api/events
 
 ### Get event by ID
-GET http://localhost:8080/api/events/1
+GET {{host}}/api/events/1
 
 ### Create a new event
-POST http://localhost:8080/api/events
+POST {{host}}/api/events
 Content-Type: application/json
-Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Authorization: Bearer {{authToken}}
 
 {
   "name": "Summer Music Festival",
@@ -20,9 +20,9 @@ Authorization: Bearer YOUR_JWT_TOKEN_HERE
 }
 
 ### Update an event
-PUT http://localhost:8080/api/events/1
+PUT {{host}}/api/events/1
 Content-Type: application/json
-Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Authorization: Bearer {{authToken}}
 
 {
   "name": "Updated Summer Music Festival",
@@ -35,9 +35,9 @@ Authorization: Bearer YOUR_JWT_TOKEN_HERE
 }
 
 ### Delete an event
-DELETE http://localhost:8080/api/events/1
-Authorization: Bearer YOUR_JWT_TOKEN_HERE
+DELETE {{host}}/api/events/1
+Authorization: Bearer {{authToken}}
 
 ### Get events by organizer
-GET http://localhost:8080/api/events/organizer/1
-Authorization: Bearer YOUR_JWT_TOKEN_HERE
+GET {{host}}/api/events/organizer/1
+Authorization: Bearer {{authToken}}

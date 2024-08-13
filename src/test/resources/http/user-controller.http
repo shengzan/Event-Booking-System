@@ -1,5 +1,5 @@
 ### Register a new user
-POST http://localhost:8080/api/users/register
+POST {{host}}/api/users/register
 Content-Type: application/json
 
 {
@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 
 ### Login user
-POST http://localhost:8080/api/users/login
+POST {{host}}/api/users/login
 Content-Type: application/json
 
 {
@@ -22,5 +22,5 @@ Content-Type: application/json
 }
 
 ### Get user profile
-GET http://localhost:8080/api/users/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMzUyMjM2OCwiZXhwIjoxNzIzNjA4NzY4fQ.-yX561xS2PeurbrY6ew4vxUZxI_uO8iwCSF-AoX9_Vs
+GET {{host}}/api/users/profile
+Authorization: Bearer {{authToken}}
