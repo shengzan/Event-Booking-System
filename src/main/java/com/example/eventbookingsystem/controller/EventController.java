@@ -49,6 +49,7 @@ public class EventController {
             User user = userService.getUserByUsername(authentication.getName());
             if (user.getRole() == User.UserRole.ORGANIZER || user.getRole() == User.UserRole.ADMIN) {
                 event.setOrganizer(user);
+                event.setAvailableCapacity(event.getCapacity()); // Setting availableCapacity because Spring will not call the Event constructor.
                 Event createdEvent = eventService.addEvent(event);
                 return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
             }

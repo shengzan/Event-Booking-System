@@ -1,5 +1,5 @@
 ### Get all events
-GET {{host}}/api/events
+GET {{host}}/api/events/
 
 ### Get event by ID
 GET {{host}}/api/events/1
@@ -12,11 +12,10 @@ Authorization: Bearer {{authToken}}
 {
   "name": "Summer Music Festival",
   "description": "A weekend of great music and fun",
-  "date": "2024-07-15T18:00:00",
+  "date": "2024-10-15T18:00:00",
   "location": "Central Park",
   "capacity": 5000,
-  "price": 49.99,
-  "category": "MUSIC"
+  "price": 49.99
 }
 
 ### Update an event
