@@ -29,7 +29,6 @@ CREATE TABLE event (
     location VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     organizer_id BIGINT,
-    FOREIGN KEY (organizer_id) REFERENCES user(id),
     UNIQUE KEY event_unique (name, date, location, organizer_id)
 );
 
@@ -39,7 +38,6 @@ CREATE TABLE `order` (
     user_id BIGINT,
     order_date DATETIME NOT NULL,
     status VARCHAR(20) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user(id),
     CHECK (status IN ('PAID', 'REFUNDED', 'CANCELLED')),
     UNIQUE KEY order_unique (id)
 );
@@ -52,9 +50,6 @@ CREATE TABLE ticket (
     user_id BIGINT,
     seat_number INT,
     status VARCHAR(20) NOT NULL,
-    FOREIGN KEY (event_id) REFERENCES event(id),
-    FOREIGN KEY (order_id) REFERENCES `order`(id),
-    FOREIGN KEY (user_id) REFERENCES user(id),
     UNIQUE KEY ticket_unique (event_id, seat_number),
     CHECK (status IN ('RESERVED', 'PAID', 'CANCELED', 'USED'))
 );
