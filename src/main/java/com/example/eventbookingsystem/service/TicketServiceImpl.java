@@ -43,6 +43,7 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = new Ticket();
         ticket.setEvent(event);
         ticket.setUser(user);
+        ticket.setStatus(Ticket.TicketStatus.RESERVED);
         event.decreaseAvailableCapacity();
         eventRepository.save(event);
         return ticketRepository.save(ticket);
@@ -65,7 +66,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket updateTicketStatus(Long ticketId, String status) {
+    public Ticket updateTicketStatus(Long ticketId, Ticket.TicketStatus status) {
         Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
         if (ticketOptional.isPresent()) {
             Ticket ticket = ticketOptional.get();
@@ -80,7 +81,7 @@ public class TicketServiceImpl implements TicketService {
         Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
         if (ticketOptional.isPresent()) {
             Ticket ticket = ticketOptional.get();
-            ticket.setStatus("CANCELLED");
+            ticket.setStatus(Ticket.TicketStatus.CANCELED);
             Event event = ticket.getEvent();
             event.setAvailableCapacity(event.getAvailableCapacity() + 1);
             eventRepository.save(event);

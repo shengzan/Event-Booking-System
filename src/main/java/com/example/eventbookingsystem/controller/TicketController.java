@@ -52,6 +52,17 @@ public class TicketController {
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping("/{id}/status")
+    public ResponseEntity<?> updateTicketStatus(@PathVariable Long id, @RequestParam Ticket.TicketStatus status, Authentication authentication) {
+        User user = userService.getUserByUsername(authentication.getName());
+        Ticket ticket = ticketService.getTicketById(id);
+        if (ticket != null && (ticket.getUser().getId().equals(user.getId()) || user.getRole() == User.UserRole.ADMIN)) {
+            Ticket updatedTicket = ticketService.updateTicketStatus(id, status);
+            return ResponseEntity.ok(updatedTicket);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @GetMapping("/event/{eventId}")
     public ResponseEntity<List<Ticket>> getTicketsByEvent(@PathVariable Long eventId, Authentication authentication) {
         User user = userService.getUserByUsername(authentication.getName());

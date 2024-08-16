@@ -23,11 +23,16 @@ public class Ticket {
 
     private Integer seatNumber;
     
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private TicketStatus status;
+
+    public enum TicketStatus {
+        RESERVED, PAID, CANCELED, USED
+    }
 
     public Ticket() {}
 
-    public Ticket(Event event, User user, Order order, Integer seatNumber, String status) {
+    public Ticket(Event event, User user, Order order, Integer seatNumber, TicketStatus status) {
         this.event = event;
         this.user = user;
         this.order = order;
@@ -46,8 +51,8 @@ public class Ticket {
     public void setOrder(Order order) { this.order = order; }
     public Integer getSeatNumber() { return seatNumber; }
     public void setSeatNumber(Integer seatNumber) { this.seatNumber = seatNumber; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public TicketStatus getStatus() { return status; }
+    public void setStatus(TicketStatus status) { this.status = status; }
 
     public double getTicketPrice() {
         return event != null ? event.getPrice() : 0.0;
@@ -61,7 +66,7 @@ public class Ticket {
                 ", user=" + user +
                 ", order=" + order +
                 ", seatNumber=" + seatNumber +
-                ", status='" + status + '\'' +
+                ", status=" + status +
                 '}';
     }
 
