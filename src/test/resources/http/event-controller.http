@@ -38,5 +38,5 @@ DELETE {{host}}/api/events/1
 Authorization: Bearer {{authToken}}
 
 ### Get events by organizer
-GET {{host}}/api/events/organizer/1
+GET {{host}}/api/events/organizer/2
 Authorization: Bearer {{authToken}}
