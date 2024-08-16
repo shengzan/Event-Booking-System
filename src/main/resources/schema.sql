@@ -50,9 +50,11 @@ CREATE TABLE ticket (
     user_id BIGINT,
     seat_number INT,
     status VARCHAR(20) NOT NULL,
-    UNIQUE KEY ticket_unique (event_id, seat_number),
     CHECK (status IN ('RESERVED', 'PAID', 'CANCELED', 'USED'))
 );
+
+-- Create index for faster queries
+CREATE INDEX idx_ticket_event ON ticket(event_id);
 
 -- Create index for faster queries
 CREATE INDEX idx_event_date ON event(date);
