@@ -1,6 +1,8 @@
 package com.example.eventbookingsystem.service;
 
 import com.example.eventbookingsystem.model.Ticket;
+import com.example.eventbookingsystem.model.User;
+
 import java.util.List;
 
 public interface TicketService {
