@@ -21,12 +21,12 @@ VALUES
 (1, '2023-06-03 09:15:00', 'CANCELLED')
 ;
 
--- Insert sample tickets with correct event_id values
-INSERT INTO ticket (event_id, order_id, seat_number)
+-- Insert sample tickets with correct event_id, order_id, user_id, seat_number, and status values
+INSERT INTO ticket (event_id, order_id, user_id, seat_number, status)
 VALUES 
-(1, 1, 101),
-(1, 1, 102),
-(2, 2, 201),
-(3, 2, 301),
-(1, 3, 103)
+(1, 1, 1, 101, 'PAID'),
+(1, 1, 1, 102, 'PAID'),
+(2, 2, 2, 201, 'PAID'),
+(3, 2, 2, 301, 'PAID'),
+(1, 3, 1, 103, 'CANCELED')
 ;
