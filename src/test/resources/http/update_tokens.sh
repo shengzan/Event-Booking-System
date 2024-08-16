@@ -18,7 +18,7 @@ organizer_token=$(extract_token "$organizer_response")
 # Login as user
 user_response=$(curl -s -i -X POST "$HOST/api/users/login" \
      -H "Content-Type: application/json" \
-     -d '{"username": "jason", "password": "123456"}')
+     -d '{"username": "testuser", "password": "123456"}')
 
 user_token=$(extract_token "$user_response")
 
