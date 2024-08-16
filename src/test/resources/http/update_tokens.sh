@@ -3,9 +3,9 @@
 # Set the host
 HOST="http://localhost:8080"
 
-# Function to extract token from header
+# Function to extract token from header and remove \r
 extract_token() {
-    echo "$1" | grep -i "Authorization:" | sed 's/Authorization: Bearer //'
+    echo "$1" | grep -i "Authorization:" | sed 's/Authorization: Bearer //' | tr -d '\r'
 }
 
 # Login as organizer
