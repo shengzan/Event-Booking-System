@@ -64,10 +64,14 @@ public class EventController {
         try {
             User user = userService.getUserByUsername(authentication.getName());
             if (eventService.isUserEventOrganizer(user.getId(), id) || user.getRole() == User.UserRole.ADMIN) {
-                Event updatedEvent = eventService.updateEvent(id, event);
-                if (updatedEvent == null) {
+                Event existingEvent = eventService.getEventById(id);
+                if (existingEvent == null) {
                     return ResponseEntity.notFound().build();
                 }
+                // Preserve the existing availableCapacity and organizer id
+                event.setAvailableCapacity(existingEvent.getAvailableCapacity());
+                event.setOrganizer(existingEvent.getOrganizer());
+                Event updatedEvent = eventService.updateEvent(id, event);
                 return ResponseEntity.ok(updatedEvent);
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permission to update this event");
