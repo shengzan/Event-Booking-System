@@ -48,10 +48,14 @@ CREATE TABLE ticket (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     event_id BIGINT,
     order_id BIGINT,
+    user_id BIGINT,
     seat_number INT,
+    status VARCHAR(20) NOT NULL,
     FOREIGN KEY (event_id) REFERENCES event(id),
     FOREIGN KEY (order_id) REFERENCES `order`(id),
-    UNIQUE KEY ticket_unique (event_id, order_id, seat_number)
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    UNIQUE KEY ticket_unique (event_id, order_id, seat_number),
+    CHECK (status IN ('RESERVED', 'PAID', 'CANCELED', 'USED'))
 );
 
 -- Create index for faster queries
