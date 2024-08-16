@@ -29,8 +29,7 @@ Authorization: Bearer {{authToken}}
   "date": "2024-12-16T18:00:00",
   "location": "Central Park",
   "capacity": 6000,
-  "price": 59.99,
-  "category": "MUSIC"
+  "price": 59.99
 }
 
 ### Delete an event

@@ -1,8 +1,8 @@
 -- Insert sample users
 INSERT INTO user (username, password, email, role, first_name, last_name, phone_number)
 VALUES 
-('jason', '123456', 'admin@example.com', 'ADMIN', 'Admin', 'User', '1234567890'),
-('organizer', '123456', 'organizer@example.com', 'ORGANIZER', 'Event', 'Organizer', '2345678901')
+('jason', '$2a$10$0MuRYLRRGPk8DIrU2z0SvujMeFENRNshcnCffHfzKsQqAzkZYNciG', 'admin@example.com', 'ADMIN', 'Admin', 'User', '1234567890'),
+('organizer', '$2a$10$0MuRYLRRGPk8DIrU2z0SvujMeFENRNshcnCffHfzKsQqAzkZYNciG', 'organizer@example.com', 'ORGANIZER', 'Event', 'Organizer', '2345678901')
 ;
 
 -- Insert sample events
