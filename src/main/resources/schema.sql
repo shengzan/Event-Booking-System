@@ -14,7 +14,8 @@ CREATE TABLE user (
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     phone_number VARCHAR(20),
-    UNIQUE KEY user_unique (username, email)
+    UNIQUE KEY user_username_unique (username),
+    UNIQUE KEY user_email_unique (email)
 );
 
 -- Create Event table
@@ -29,7 +30,7 @@ CREATE TABLE event (
     price DECIMAL(10, 2) NOT NULL,
     organizer_id BIGINT,
     FOREIGN KEY (organizer_id) REFERENCES user(id),
-    UNIQUE KEY event_unique (name, date, organizer_id)
+    UNIQUE KEY event_unique (name, date, location, organizer_id)
 );
 
 -- Create Order table
@@ -40,7 +41,7 @@ CREATE TABLE `order` (
     status VARCHAR(20) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user(id),
     CHECK (status IN ('PAID', 'REFUNDED', 'CANCELLED')),
-    UNIQUE KEY order_unique (user_id, order_date)
+    UNIQUE KEY order_unique (id)
 );
 
 -- Create Ticket table
@@ -54,7 +55,7 @@ CREATE TABLE ticket (
     FOREIGN KEY (event_id) REFERENCES event(id),
     FOREIGN KEY (order_id) REFERENCES `order`(id),
     FOREIGN KEY (user_id) REFERENCES user(id),
-    UNIQUE KEY ticket_unique (event_id, order_id, seat_number),
+    UNIQUE KEY ticket_unique (event_id, seat_number),
     CHECK (status IN ('RESERVED', 'PAID', 'CANCELED', 'USED'))
 );
 
