@@ -23,8 +23,15 @@ user_response=$(curl -s -X POST "$HOST/api/users/login" \
 user_token=$(extract_token "$user_response")
 
 # Update http-client.env.json
+ENV_FILE="/Users/zanzan/Documents/GitHub/Event-Booking-System/src/test/resources/http/http-client.env.json"
+
+# Create the file if it doesn't exist
+if [ ! -f "$ENV_FILE" ]; then
+    echo '{"dev":{"host":"http://localhost:8080","authToken":"","userAuthToken":""}}' > "$ENV_FILE"
+fi
+
 jq --arg organizer_token "$organizer_token" --arg user_token "$user_token" \
    '.dev.authToken = $organizer_token | .dev.userAuthToken = $user_token' \
-   src/test/resources/http/http-client.env.json > temp.json && mv temp.json src/test/resources/http/http-client.env.json
+   "$ENV_FILE" > temp.json && mv temp.json "$ENV_FILE"
 
 echo "Tokens updated successfully!"
