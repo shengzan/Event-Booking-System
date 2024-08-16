@@ -3,20 +3,20 @@
 # Set the host
 HOST="http://localhost:8080"
 
-# Function to extract token from response
+# Function to extract token from header
 extract_token() {
-    echo "$1" | grep -o '"token":"[^"]*' | sed 's/"token":"//'
+    echo "$1" | grep -i "Authorization:" | sed 's/Authorization: Bearer //'
 }
 
 # Login as organizer
-organizer_response=$(curl -s -X POST "$HOST/api/users/login" \
+organizer_response=$(curl -s -i -X POST "$HOST/api/users/login" \
      -H "Content-Type: application/json" \
      -d '{"username": "organizer", "password": "123456"}')
 
 organizer_token=$(extract_token "$organizer_response")
 
 # Login as user
-user_response=$(curl -s -X POST "$HOST/api/users/login" \
+user_response=$(curl -s -i -X POST "$HOST/api/users/login" \
      -H "Content-Type: application/json" \
      -d '{"username": "jason", "password": "123456"}')
 
