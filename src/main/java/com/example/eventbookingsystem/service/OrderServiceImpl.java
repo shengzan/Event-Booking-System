@@ -23,12 +23,14 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final TicketRepository ticketRepository;
     private final EventRepository eventRepository;
+    private final TicketService ticketService;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, TicketRepository ticketRepository, EventRepository eventRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, TicketRepository ticketRepository, EventRepository eventRepository, TicketService ticketService) {
         this.orderRepository = orderRepository;
         this.ticketRepository = ticketRepository;
         this.eventRepository = eventRepository;
+        this.ticketService = ticketService;
     }
 
     @Override
@@ -41,8 +43,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new RuntimeException("Event not found"));
         
             for (int i = 0; i < eventOrder.getTicketCount(); i++) {
-                Ticket ticket = new Ticket(event, order, user, Ticket.TicketStatus.ACTIVE);
-                ticket = ticketRepository.save(ticket);
+                Ticket ticket = ticketService.createTicket(event, order, user);
                 order.addTicket(ticket);
             }
         }

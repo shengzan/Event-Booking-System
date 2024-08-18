@@ -27,20 +27,9 @@ public class TicketController {
         this.eventService = eventService;
     }
 
-    @PostMapping
-    public ResponseEntity<?> createTicket(@RequestParam Long eventId, Authentication authentication) {
-        try {
-            User user = userService.getUserByUsername(authentication.getName());
-            Event event = eventService.getEventById(eventId);
-            if (event == null) {
-                return ResponseEntity.notFound().build();
-            }
-            Ticket ticket = ticketService.createTicket(event, user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(ticket);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating ticket: " + e.getMessage());
-        }
-    }
+    // This method is no longer needed as tickets are created as part of the order process
+    // If you want to keep it for direct ticket creation, you'll need to modify it to include an order
+    // or create a separate endpoint for administrative ticket creation
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getTicketById(@PathVariable Long id, Authentication authentication) {
