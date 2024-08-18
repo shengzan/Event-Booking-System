@@ -27,9 +27,9 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public Ticket createTicket(Event event, Order order, User user) {
-        Ticket ticket = new Ticket(event, order, user, Ticket.TicketStatus.ACTIVE);
-        ticket = ticketRepository.save(ticket);
-        return assignSeatNumber(ticket.getId());
+        Ticket ticket = new Ticket(event, order, user, Ticket.TicketStatus.PAID);
+        ticket = assignSeatNumber(ticket);
+        return ticketRepository.save(ticket);
     }
 
     @Override
@@ -38,26 +38,21 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket assignSeatNumber(Long ticketId) {
-        Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
-        if (ticketOptional.isPresent()) {
-            Ticket ticket = ticketOptional.get();
-            Event event = ticket.getEvent();
-            List<Ticket> eventTickets = ticketRepository.findByEventId(event.getId());
-            
-            // Find the highest seat number for this event
-            int highestSeatNumber = eventTickets.stream()
-                .map(Ticket::getSeatNumber)
-                .filter(Objects::nonNull)
-                .max(Integer::compareTo)
-                .orElse(0);
-            
-            // Assign the next seat number
-            int newSeatNumber = highestSeatNumber + 1;
-            ticket.setSeatNumber(newSeatNumber);
-            return ticketRepository.save(ticket);
-        }
-        return null;
+    public Ticket assignSeatNumber(Ticket ticket) {
+        Event event = ticket.getEvent();
+        List<Ticket> eventTickets = ticketRepository.findByEventId(event.getId());
+        
+        // Find the highest seat number for this event
+        int highestSeatNumber = eventTickets.stream()
+            .map(Ticket::getSeatNumber)
+            .filter(Objects::nonNull)
+            .max(Integer::compareTo)
+            .orElse(0);
+        
+        // Assign the next seat number
+        int newSeatNumber = highestSeatNumber + 1;
+        ticket.setSeatNumber(newSeatNumber);
+        return ticket;
     }
 
     @Override

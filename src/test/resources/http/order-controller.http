@@ -34,7 +34,7 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "status": "CANCELLED"
+  "status": "CANCELED"
 }
 
 ### Cancel an order

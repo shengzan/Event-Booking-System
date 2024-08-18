@@ -38,7 +38,7 @@ CREATE TABLE `order` (
     user_id BIGINT,
     order_date DATETIME NOT NULL,
     status VARCHAR(20) NOT NULL,
-    CHECK (status IN ('PAID', 'REFUNDED', 'CANCELLED')),
+    CHECK (status IN ('PAID', 'REFUNDED', 'CANCELED')),
     UNIQUE KEY order_unique (id)
 );
 
@@ -52,9 +52,6 @@ CREATE TABLE ticket (
     status VARCHAR(20) NOT NULL,
     CHECK (status IN ('RESERVED', 'PAID', 'CANCELED', 'USED'))
 );
-
--- Create index for faster queries
-CREATE INDEX idx_ticket_event ON ticket(event_id);
 
 -- Create index for faster queries
 CREATE INDEX idx_event_date ON event(date);

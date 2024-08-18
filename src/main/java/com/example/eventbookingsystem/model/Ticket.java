@@ -27,7 +27,7 @@ public class Ticket {
     private TicketStatus status;
 
     public enum TicketStatus {
-        ACTIVE, CANCELLED, REFUNDED
+        PAID, CANCELED, REFUNDED
     }
 
     public Ticket() {}

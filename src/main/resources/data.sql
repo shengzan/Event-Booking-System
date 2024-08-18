@@ -18,7 +18,7 @@ INSERT INTO `order` (user_id, order_date, status)
 VALUES 
 (1, '2023-06-01 10:00:00', 'PAID'),
 (2, '2023-06-02 11:30:00', 'PAID'),
-(1, '2023-06-03 09:15:00', 'CANCELLED')
+(1, '2023-06-03 09:15:00', 'CANCELED')
 ;
 
 -- Insert sample tickets with correct event_id, order_id, user_id, seat_number, and status values

@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order cancelOrder(Long id) {
-        return updateOrderStatus(id, "CANCELLED");
+        return updateOrderStatus(id, "CANCELED");
     }
 
     @Override

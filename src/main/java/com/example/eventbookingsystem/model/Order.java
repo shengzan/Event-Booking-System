@@ -30,7 +30,7 @@ public class Order {
     private List<Ticket> tickets = new ArrayList<>();
 
     public enum OrderStatus {
-        PAID, REFUNDED, CANCELLED
+        PAID, REFUNDED, CANCELED
     }
 
     // Constructors
