@@ -1,5 +1,6 @@
 package com.example.eventbookingsystem.service;
 
+import com.example.eventbookingsystem.model.Event;
 import com.example.eventbookingsystem.model.Ticket;
 import com.example.eventbookingsystem.model.User;
 
@@ -12,4 +13,5 @@ public interface TicketService {
     List<Ticket> getTicketsByEvent(Long eventId);
     List<Ticket> getTicketsByUser(Long userId);
     List<Ticket> getAllTickets();
+    Ticket createTicket(Event event, User user);
 }
