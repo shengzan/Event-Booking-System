@@ -27,10 +27,6 @@ public class TicketController {
         this.eventService = eventService;
     }
 
-    // This method is no longer needed as tickets are created as part of the order process
-    // If you want to keep it for direct ticket creation, you'll need to modify it to include an order
-    // or create a separate endpoint for administrative ticket creation
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getTicketById(@PathVariable Long id, Authentication authentication) {
         try {
