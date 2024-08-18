@@ -15,4 +15,5 @@ public interface TicketService {
     List<Ticket> getTicketsByUser(Long userId);
     List<Ticket> getAllTickets();
     Ticket createTicket(Event event, Order order, User user);
+    Ticket updateTicketStatus(Long ticketId, Ticket.TicketStatus status);
 }

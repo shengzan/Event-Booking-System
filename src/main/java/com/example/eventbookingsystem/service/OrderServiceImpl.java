@@ -89,7 +89,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order cancelOrder(Long id) {
-        return updateOrderStatus(id, "CANCELED");
+        Order order = updateOrderStatus(id, "CANCELED");
+        if (order != null) {
+            for (Ticket ticket : order.getTickets()) {
+                ticketService.updateTicketStatus(ticket.getId(), Ticket.TicketStatus.CANCELED, ticket.getUser());
+            }
+        }
+        return order;
     }
 
     @Override
