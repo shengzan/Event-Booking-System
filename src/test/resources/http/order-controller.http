@@ -4,7 +4,16 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "ticketIds": [1, 2, 3]
+  "eventOrders": [
+    {
+      "eventId": 1,
+      "ticketCount": 2
+    },
+    {
+      "eventId": 2,
+      "ticketCount": 1
+    }
+  ]
 }
 
 ### Get order by ID
