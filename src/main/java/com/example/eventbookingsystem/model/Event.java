@@ -19,7 +19,6 @@ public class Event {
     private String description;
 
     @NotNull(message = "Date is required")
-    @Future(message = "Date must be in the future")
     private Date date;
 
     @Min(value = 1, message = "Capacity must be at least 1")
