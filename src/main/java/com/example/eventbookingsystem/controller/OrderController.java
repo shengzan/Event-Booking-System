@@ -26,10 +26,10 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createOrder(@RequestBody List<EventOrder> eventOrders, Authentication authentication) {
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest, Authentication authentication) {
         try {
             User user = userService.getUserByUsername(authentication.getName());
-            Order order = orderService.createOrder(eventOrders, user);
+            Order order = orderService.createOrder(orderRequest.getEventOrders(), user);
             return ResponseEntity.status(HttpStatus.CREATED).body(order);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating order: " + e.getMessage());
