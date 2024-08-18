@@ -41,11 +41,11 @@ Authorization: Bearer {{authToken}}
 POST {{host}}/api/orders/13/cancel
 Authorization: Bearer {{authToken}}
 
-### Refund an order
+### Refund an order (Admin only)
 POST {{host}}/api/orders/1/refund
 Authorization: Bearer {{authToken}}
 
-### Get orders by status (PAID, REFUNDED, CANCELLED)
+### Get orders by status (PAID, REFUNDED, CANCELLED) (Admin only)
 GET {{host}}/api/orders/status/PAID
 Authorization: Bearer {{authToken}}
 
