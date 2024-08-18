@@ -62,11 +62,6 @@ public class Order {
         ticket.setOrder(this);
     }
 
-    public void removeTicket(Ticket ticket) {
-        tickets.remove(ticket);
-        ticket.setOrder(null);
-    }
-
     public double calculateTotalPrice() {
         return tickets.stream().mapToDouble(Ticket::getTicketPrice).sum();
     }
