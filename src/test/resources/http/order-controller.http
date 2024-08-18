@@ -1,0 +1,41 @@
+### Create a new order
+POST {{host}}/api/orders
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "ticketIds": [1, 2, 3]
+}
+
+### Get order by ID
+GET {{host}}/api/orders/1
+Authorization: Bearer {{authToken}}
+
+### Get orders for current user
+GET {{host}}/api/orders/user
+Authorization: Bearer {{authToken}}
+
+### Get all orders (admin only)
+GET {{host}}/api/orders
+Authorization: Bearer {{authToken}}
+
+### Update order status
+PUT {{host}}/api/orders/1/status
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "status": "COMPLETED"
+}
+
+### Cancel an order
+POST {{host}}/api/orders/1/cancel
+Authorization: Bearer {{authToken}}
+
+### Refund an order
+POST {{host}}/api/orders/1/refund
+Authorization: Bearer {{authToken}}
+
+### Get orders by status
+GET {{host}}/api/orders/status/PENDING
+Authorization: Bearer {{authToken}}
