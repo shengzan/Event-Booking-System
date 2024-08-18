@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TicketService {
     Ticket getTicketById(Long id);
-    Ticket assignSeatNumber(Long ticketId, Integer seatNumber);
+    Ticket assignSeatNumber(Long ticketId);
     Ticket updateTicketStatus(Long ticketId, Ticket.TicketStatus status, User user);
     List<Ticket> getTicketsByEvent(Long eventId);
     List<Ticket> getTicketsByUser(Long userId);
