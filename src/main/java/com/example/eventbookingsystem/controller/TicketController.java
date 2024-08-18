@@ -1,10 +1,11 @@
 package com.example.eventbookingsystem.controller;
 
+import com.example.eventbookingsystem.model.Event;
 import com.example.eventbookingsystem.model.Ticket;
 import com.example.eventbookingsystem.model.User;
+import com.example.eventbookingsystem.service.EventService;
 import com.example.eventbookingsystem.service.TicketService;
 import com.example.eventbookingsystem.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -41,58 +42,74 @@ public class TicketController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<Ticket> orderTicket(@RequestParam Long eventId, @RequestParam String customerName, @RequestParam String customerEmail, Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        Ticket ticket = ticketService.orderTicket(eventId, customerName, customerEmail);
-        return ResponseEntity.ok(ticket);
-    }
-
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getTicketById(@PathVariable Long id, Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        Ticket ticket = ticketService.getTicketById(id);
-        if (ticket != null && (ticket.getUser().getId().equals(user.getId()) || user.getRole() == User.UserRole.ADMIN)) {
-            return ResponseEntity.ok(ticket);
+    public ResponseEntity<?> getTicketById(@PathVariable Long id, Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            Ticket ticket = ticketService.getTicketById(id);
+            if (ticket != null && (ticket.getUser().getId().equals(user.getId()) || user.getRole() == User.UserRole.ADMIN)) {
+                return ResponseEntity.ok(ticket);
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permission to view this ticket");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error retrieving ticket: " + e.getMessage());
         }
-        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/{id}/cancel")
     public ResponseEntity<?> cancelTicket(@PathVariable Long id, Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        Ticket ticket = ticketService.getTicketById(id);
-        if (ticket != null && (ticket.getUser().getId().equals(user.getId()) || user.getRole() == User.UserRole.ADMIN)) {
-            Ticket cancelledTicket = ticketService.cancelTicket(id);
-            return ResponseEntity.ok(cancelledTicket);
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            Ticket ticket = ticketService.getTicketById(id);
+            if (ticket != null && (ticket.getUser().getId().equals(user.getId()) || user.getRole() == User.UserRole.ADMIN)) {
+                Ticket cancelledTicket = ticketService.updateTicketStatus(id, Ticket.TicketStatus.CANCELLED, user);
+                return ResponseEntity.ok(cancelledTicket);
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permission to cancel this ticket");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error cancelling ticket: " + e.getMessage());
         }
-        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/{id}/status")
     public ResponseEntity<?> updateTicketStatus(@PathVariable Long id, @RequestParam Ticket.TicketStatus status, Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        Ticket updatedTicket = ticketService.updateTicketStatus(id, status, user);
-        if (updatedTicket != null) {
-            return ResponseEntity.ok(updatedTicket);
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            if (user.getRole() == User.UserRole.ADMIN) {
+                Ticket updatedTicket = ticketService.updateTicketStatus(id, status, user);
+                if (updatedTicket != null) {
+                    return ResponseEntity.ok(updatedTicket);
+                }
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only administrators can update ticket status");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error updating ticket status: " + e.getMessage());
         }
-        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/event/{eventId}")
-    public ResponseEntity<List<Ticket>> getTicketsByEvent(@PathVariable Long eventId, Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        if (user.getRole() == User.UserRole.ADMIN || user.getRole() == User.UserRole.ORGANIZER) {
-            List<Ticket> tickets = ticketService.getTicketsByEvent(eventId);
-            return ResponseEntity.ok(tickets);
+    public ResponseEntity<?> getTicketsByEvent(@PathVariable Long eventId, Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            if (user.getRole() == User.UserRole.ADMIN || user.getRole() == User.UserRole.ORGANIZER) {
+                List<Ticket> tickets = ticketService.getTicketsByEvent(eventId);
+                return ResponseEntity.ok(tickets);
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only administrators and organizers can view tickets by event");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error retrieving tickets by event: " + e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<Ticket>> getTicketsByUser(Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName());
-        List<Ticket> tickets = ticketService.getTicketsByUser(user.getId());
-        return ResponseEntity.ok(tickets);
+    public ResponseEntity<?> getTicketsByUser(Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            List<Ticket> tickets = ticketService.getTicketsByUser(user.getId());
+            return ResponseEntity.ok(tickets);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error retrieving user tickets: " + e.getMessage());
+        }
     }
 }
