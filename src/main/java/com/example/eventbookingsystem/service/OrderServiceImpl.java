@@ -92,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = updateOrderStatus(id, "CANCELED");
         if (order != null) {
             for (Ticket ticket : order.getTickets()) {
-                ticketService.updateTicketStatus(ticket.getId(), Ticket.TicketStatus.CANCELED, ticket.getUser());
+                ticketService.updateTicketStatus(ticket.getId(), Ticket.TicketStatus.CANCELED);
             }
         }
         return order;
