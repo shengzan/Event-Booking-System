@@ -29,7 +29,7 @@ GET {{host}}/api/orders
 Authorization: Bearer {{authToken}}
 
 ### Update order status
-PUT {{host}}/api/orders/1/status
+PATCH {{host}}/api/orders/1/status
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -45,6 +45,14 @@ Authorization: Bearer {{authToken}}
 POST {{host}}/api/orders/1/refund
 Authorization: Bearer {{authToken}}
 
-### Get orders by status
+### Get orders by status (PENDING, COMPLETED, CANCELLED, REFUNDED)
 GET {{host}}/api/orders/status/PENDING
+Authorization: Bearer {{authToken}}
+
+### Get orders by event ID
+GET {{host}}/api/orders/event/1
+Authorization: Bearer {{authToken}}
+
+### Get orders within a date range
+GET {{host}}/api/orders/daterange?start=2023-01-01&end=2023-12-31
 Authorization: Bearer {{authToken}}
