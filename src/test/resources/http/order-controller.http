@@ -45,8 +45,8 @@ Authorization: Bearer {{authToken}}
 POST {{host}}/api/orders/1/refund
 Authorization: Bearer {{authToken}}
 
-### Get orders by status (PENDING, COMPLETED, CANCELLED, REFUNDED)
-GET {{host}}/api/orders/status/PENDING
+### Get orders by status (PAID, REFUNDED, CANCELLED)
+GET {{host}}/api/orders/status/PAID
 Authorization: Bearer {{authToken}}
 
 ### Get orders by event ID
