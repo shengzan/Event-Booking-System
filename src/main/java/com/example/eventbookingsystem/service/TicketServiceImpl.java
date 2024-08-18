@@ -1,6 +1,7 @@
 package com.example.eventbookingsystem.service;
 
 import com.example.eventbookingsystem.model.Event;
+import com.example.eventbookingsystem.model.Order;
 import com.example.eventbookingsystem.model.Ticket;
 import com.example.eventbookingsystem.model.User;
 import com.example.eventbookingsystem.repository.EventRepository;
