@@ -45,8 +45,6 @@ public class Ticket {
     public void setId(Long id) { this.id = id; }
     public Event getEvent() { return event; }
     public void setEvent(Event event) { this.event = event; }
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
     public Order getOrder() { return order; }
     public void setOrder(Order order) { this.order = order; }
     public Integer getSeatNumber() { return seatNumber; }
