@@ -18,10 +18,27 @@ public class TicketController {
 
     private final TicketService ticketService;
     private final UserService userService;
+    private final EventService eventService;
 
-    public TicketController(TicketService ticketService, UserService userService) {
+    public TicketController(TicketService ticketService, UserService userService, EventService eventService) {
         this.ticketService = ticketService;
         this.userService = userService;
+        this.eventService = eventService;
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createTicket(@RequestParam Long eventId, Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            Event event = eventService.getEventById(eventId);
+            if (event == null) {
+                return ResponseEntity.notFound().build();
+            }
+            Ticket ticket = ticketService.createTicket(event, user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ticket);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating ticket: " + e.getMessage());
+        }
     }
 
     @PostMapping
