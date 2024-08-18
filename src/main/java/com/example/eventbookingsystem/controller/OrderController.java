@@ -1,6 +1,7 @@
 package com.example.eventbookingsystem.controller;
 
 import com.example.eventbookingsystem.dto.EventOrder;
+import com.example.eventbookingsystem.dto.OrderRequest;
 import com.example.eventbookingsystem.model.Order;
 import com.example.eventbookingsystem.model.User;
 import com.example.eventbookingsystem.service.OrderService;
