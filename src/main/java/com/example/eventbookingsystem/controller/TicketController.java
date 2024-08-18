@@ -46,7 +46,7 @@ public class TicketController {
             User user = userService.getUserByUsername(authentication.getName());
             Ticket ticket = ticketService.getTicketById(id);
             if (ticket != null && (ticket.getUser().getId().equals(user.getId()) || user.getRole() == User.UserRole.ADMIN)) {
-                Ticket cancelledTicket = ticketService.updateTicketStatus(id, Ticket.TicketStatus.CANCELED, user);
+                Ticket cancelledTicket = ticketService.updateTicketStatus(id, Ticket.TicketStatus.CANCELED);
                 return ResponseEntity.ok(cancelledTicket);
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permission to cancel this ticket");
