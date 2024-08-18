@@ -1,20 +1,13 @@
 package com.example.eventbookingsystem.service;
 
-import com.example.eventbookingsystem.model.Order;
-import com.example.eventbookingsystem.model.User;
-
+import com.example.eventbookingsystem.model.Ticket;
 import java.util.List;
 
-import com.example.eventbookingsystem.dto.EventOrder;
-
 public interface OrderService {
-    Order createOrder(List<EventOrder> eventOrders, User user);
-    Order getOrderById(Long id);
-    List<Order> getOrdersByUser(User user);
-    boolean isUserAuthorizedForOrder(User user, Long orderId);
-    List<Order> getAllOrders();
-    Order updateOrderStatus(Long id, String status);
-    Order cancelOrder(Long id);
-    Order refundOrder(Long id);
-    List<Order> getOrdersByStatus(Order.OrderStatus status);
+    Ticket getTicketById(Long id);
+    Ticket assignSeatNumber(Long ticketId, Integer seatNumber);
+    Ticket updateTicketStatus(Long ticketId, Ticket.TicketStatus status);
+    List<Ticket> getTicketsByEvent(Long eventId);
+    List<Ticket> getTicketsByUser(Long userId);
+    List<Ticket> getAllTickets();
 }
