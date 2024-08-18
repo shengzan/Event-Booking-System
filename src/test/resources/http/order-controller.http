@@ -52,7 +52,3 @@ Authorization: Bearer {{authToken}}
 ### Get orders by event ID
 GET {{host}}/api/orders/event/1
 Authorization: Bearer {{authToken}}
-
-### Get orders within a date range
-GET {{host}}/api/orders/daterange?start=2023-01-01&end=2023-12-31
-Authorization: Bearer {{authToken}}
