@@ -17,7 +17,7 @@ Authorization: Bearer {{authToken}}
 }
 
 ### Get order by ID
-GET {{host}}/api/orders/1
+GET {{host}}/api/orders/13
 Authorization: Bearer {{authToken}}
 
 ### Get orders for current user
@@ -38,7 +38,7 @@ Authorization: Bearer {{authToken}}
 }
 
 ### Cancel an order
-POST {{host}}/api/orders/1/cancel
+POST {{host}}/api/orders/13/cancel
 Authorization: Bearer {{authToken}}
 
 ### Refund an order
