@@ -7,6 +7,7 @@ import com.example.eventbookingsystem.model.Ticket;
 import com.example.eventbookingsystem.model.User;
 import com.example.eventbookingsystem.repository.OrderRepository;
 import com.example.eventbookingsystem.repository.TicketRepository;
+import com.example.eventbookingsystem.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +22,13 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final TicketRepository ticketRepository;
+    private final EventRepository eventRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, TicketRepository ticketRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, TicketRepository ticketRepository, EventRepository eventRepository) {
         this.orderRepository = orderRepository;
         this.ticketRepository = ticketRepository;
+        this.eventRepository = eventRepository;
     }
 
     @Override
