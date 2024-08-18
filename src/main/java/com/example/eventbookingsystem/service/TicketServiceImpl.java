@@ -25,8 +25,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket createTicket(Event event, User user) {
-        Ticket ticket = new Ticket(event, null, user, Ticket.TicketStatus.ACTIVE);
+    public Ticket createTicket(Event event, Order order, User user) {
+        Ticket ticket = new Ticket(event, order, user, Ticket.TicketStatus.ACTIVE);
         return ticketRepository.save(ticket);
     }
 

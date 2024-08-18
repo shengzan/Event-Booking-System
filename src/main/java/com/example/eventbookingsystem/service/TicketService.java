@@ -13,5 +13,5 @@ public interface TicketService {
     List<Ticket> getTicketsByEvent(Long eventId);
     List<Ticket> getTicketsByUser(Long userId);
     List<Ticket> getAllTickets();
-    Ticket createTicket(Event event, User user);
+    Ticket createTicket(Event event, Order order, User user);
 }
