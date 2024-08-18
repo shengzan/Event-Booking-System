@@ -5,7 +5,6 @@ import com.example.eventbookingsystem.model.Ticket;
 import com.example.eventbookingsystem.model.User;
 import com.example.eventbookingsystem.repository.EventRepository;
 import com.example.eventbookingsystem.repository.TicketRepository;
-import com.example.eventbookingsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,36 +16,11 @@ public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
 
     @Autowired
-    public TicketServiceImpl(TicketRepository ticketRepository, EventRepository eventRepository, UserRepository userRepository) {
+    public TicketServiceImpl(TicketRepository ticketRepository, EventRepository eventRepository) {
         this.ticketRepository = ticketRepository;
         this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public Ticket orderTicket(Long eventId, String customerName, String customerEmail) {
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
-        if (!event.hasAvailableCapacity()) {
-            throw new RuntimeException("No available tickets for this event");
-        }
-        User user = userRepository.findByEmail(customerEmail).orElseGet(() -> {
-            User newUser = new User();
-            newUser.setEmail(customerEmail);
-            newUser.setUsername(customerEmail); // Using email as username for simplicity
-            newUser.setFirstName(customerName.split(" ")[0]);
-            newUser.setLastName(customerName.split(" ").length > 1 ? customerName.split(" ")[1] : "");
-            return userRepository.save(newUser);
-        });
-        Ticket ticket = new Ticket();
-        ticket.setEvent(event);
-        ticket.setUser(user);
-        ticket.setStatus(Ticket.TicketStatus.RESERVED);
-        event.decreaseAvailableCapacity();
-        eventRepository.save(event);
-        return ticketRepository.save(ticket);
     }
 
     @Override
@@ -66,27 +40,11 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket updateTicketStatus(Long ticketId, Ticket.TicketStatus status, User user) {
+    public Ticket updateTicketStatus(Long ticketId, Ticket.TicketStatus status) {
         Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
         if (ticketOptional.isPresent()) {
             Ticket ticket = ticketOptional.get();
-            if (ticket.getUser().getId().equals(user.getId()) || user.getRole() == User.UserRole.ADMIN) {
-                ticket.setStatus(status);
-                return ticketRepository.save(ticket);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Ticket cancelTicket(Long ticketId) {
-        Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
-        if (ticketOptional.isPresent()) {
-            Ticket ticket = ticketOptional.get();
-            ticket.setStatus(Ticket.TicketStatus.CANCELED);
-            Event event = ticket.getEvent();
-            event.setAvailableCapacity(event.getAvailableCapacity() + 1);
-            eventRepository.save(event);
+            ticket.setStatus(status);
             return ticketRepository.save(ticket);
         }
         return null;
