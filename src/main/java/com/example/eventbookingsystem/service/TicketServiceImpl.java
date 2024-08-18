@@ -56,18 +56,6 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket updateTicketStatus(Long ticketId, Ticket.TicketStatus status, User user) {
-        Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
-        if (ticketOptional.isPresent()) {
-            Ticket ticket = ticketOptional.get();
-            ticket.setStatus(status);
-            ticket.setUser(user);
-            return ticketRepository.save(ticket);
-        }
-        return null;
-    }
-
-    @Override
     public Ticket updateTicketStatus(Long ticketId, Ticket.TicketStatus status) {
         Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
         if (ticketOptional.isPresent()) {
