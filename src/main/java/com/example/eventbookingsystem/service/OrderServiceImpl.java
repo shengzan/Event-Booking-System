@@ -37,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Order createOrder(List<EventOrder> eventOrders, User user) {
         Order order = new Order(user, LocalDateTime.now(), Order.OrderStatus.PAID);
+        order = orderRepository.save(order);  // Save the order first to get an ID
     
         for (EventOrder eventOrder : eventOrders) {
             Event event = eventRepository.findById(eventOrder.getEventId())
@@ -44,11 +45,12 @@ public class OrderServiceImpl implements OrderService {
         
             for (int i = 0; i < eventOrder.getTicketCount(); i++) {
                 Ticket ticket = ticketService.createTicket(event, order, user);
+                ticketRepository.save(ticket);  // Save each ticket
                 order.addTicket(ticket);
             }
         }
     
-        return orderRepository.save(order);
+        return orderRepository.save(order);  // Save the order again with updated tickets
     }
 
     @Override
