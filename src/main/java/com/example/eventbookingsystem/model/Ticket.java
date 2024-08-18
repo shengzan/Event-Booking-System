@@ -17,6 +17,10 @@ public class Ticket {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     private Integer seatNumber;
     
     @Enumerated(EnumType.STRING)
@@ -28,9 +32,10 @@ public class Ticket {
 
     public Ticket() {}
 
-    public Ticket(Event event, Order order, TicketStatus status) {
+    public Ticket(Event event, Order order, User user, TicketStatus status) {
         this.event = event;
         this.order = order;
+        this.user = user;
         this.status = status;
     }
 
@@ -41,6 +46,8 @@ public class Ticket {
     public void setEvent(Event event) { this.event = event; }
     public Order getOrder() { return order; }
     public void setOrder(Order order) { this.order = order; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
     public Integer getSeatNumber() { return seatNumber; }
     public void setSeatNumber(Integer seatNumber) { this.seatNumber = seatNumber; }
     public TicketStatus getStatus() { return status; }
