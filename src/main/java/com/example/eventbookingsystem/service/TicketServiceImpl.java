@@ -29,6 +29,8 @@ public class TicketServiceImpl implements TicketService {
     public Ticket createTicket(Event event, Order order, User user) {
         Ticket ticket = new Ticket(event, order, user, Ticket.TicketStatus.PAID);
         ticket = assignSeatNumber(ticket);
+        event.decreaseAvailableCapacity();
+        eventRepository.save(event);
         return ticketRepository.save(ticket);
     }
 
