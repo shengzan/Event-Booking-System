@@ -41,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new RuntimeException("Event not found"));
         
             for (int i = 0; i < eventOrder.getTicketCount(); i++) {
-                Ticket ticket = new Ticket(event, order, Ticket.TicketStatus.ACTIVE);
+                Ticket ticket = new Ticket(event, order, user, Ticket.TicketStatus.ACTIVE);
                 ticket = ticketRepository.save(ticket);
                 order.addTicket(ticket);
             }
