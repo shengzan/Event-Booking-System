@@ -10,15 +10,11 @@ public class Ticket {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "event_id")
+    @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     private Integer seatNumber;
@@ -27,16 +23,14 @@ public class Ticket {
     private TicketStatus status;
 
     public enum TicketStatus {
-        RESERVED, PAID, CANCELED, USED
+        ACTIVE, CANCELLED, REFUNDED
     }
 
     public Ticket() {}
 
-    public Ticket(Event event, User user, Order order, Integer seatNumber, TicketStatus status) {
+    public Ticket(Event event, Order order, TicketStatus status) {
         this.event = event;
-        this.user = user;
         this.order = order;
-        this.seatNumber = seatNumber;
         this.status = status;
     }
 
