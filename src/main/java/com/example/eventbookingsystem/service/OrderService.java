@@ -5,8 +5,10 @@ import com.example.eventbookingsystem.model.User;
 
 import java.util.List;
 
+import com.example.eventbookingsystem.dto.EventOrder;
+
 public interface OrderService {
-    Order createOrder(Long[] ticketIds, User user);
+    Order createOrder(List<EventOrder> eventOrders, User user);
     Order getOrderById(Long id);
     List<Order> getOrdersByUser(User user);
     boolean isUserAuthorizedForOrder(User user, Long orderId);
