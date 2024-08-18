@@ -1,0 +1,19 @@
+### Get ticket by ID
+GET {{host}}/api/tickets/1
+Authorization: Bearer {{authToken}}
+
+### Cancel a ticket
+POST {{host}}/api/tickets/1/cancel
+Authorization: Bearer {{authToken}}
+
+### Update ticket status (Admin only)
+POST {{host}}/api/tickets/1/status?status=REFUNDED
+Authorization: Bearer {{authToken}}
+
+### Get tickets by event (Admin or Organizer only)
+GET {{host}}/api/tickets/event/1
+Authorization: Bearer {{authToken}}
+
+### Get tickets for current user
+GET {{host}}/api/tickets/user
+Authorization: Bearer {{authToken}}
