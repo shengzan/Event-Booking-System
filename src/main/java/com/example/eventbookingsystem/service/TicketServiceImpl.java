@@ -28,6 +28,19 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket createTicket(Event event, Order order, User user) {
         Ticket ticket = new Ticket(event, order, user, Ticket.TicketStatus.ACTIVE);
+        
+        // Find the highest seat number for this event
+        List<Ticket> eventTickets = ticketRepository.findByEventId(event.getId());
+        int highestSeatNumber = eventTickets.stream()
+            .map(Ticket::getSeatNumber)
+            .filter(Objects::nonNull)
+            .max(Integer::compareTo)
+            .orElse(0);
+        
+        // Assign the next seat number
+        int newSeatNumber = highestSeatNumber + 1;
+        ticket.setSeatNumber(newSeatNumber);
+        
         return ticketRepository.save(ticket);
     }
 
