@@ -60,7 +60,7 @@ public class TicketController {
         try {
             User user = userService.getUserByUsername(authentication.getName());
             if (user.getRole() == User.UserRole.ADMIN) {
-                Ticket updatedTicket = ticketService.updateTicketStatus(id, status, user);
+                Ticket updatedTicket = ticketService.updateTicketStatus(id, status);
                 if (updatedTicket != null) {
                     return ResponseEntity.ok(updatedTicket);
                 }
