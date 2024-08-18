@@ -28,16 +28,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order createOrder(Long[] ticketIds, User user) {
-        List<Ticket> tickets = ticketRepository.findAllById(Arrays.asList(ticketIds));
-        if (tickets.size() != ticketIds.length) {
-            throw new RuntimeException("One or more tickets not found");
-        }
-        
+    public Order createOrder(List<EventOrder> eventOrders, User user) {
         Order order = new Order(user, LocalDateTime.now(), Order.OrderStatus.PAID);
-        for (Ticket ticket : tickets) {
-            order.addTicket(ticket);
+    
+        for (EventOrder eventOrder : eventOrders) {
+            Event event = eventRepository.findById(eventOrder.getEventId())
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+        
+            for (int i = 0; i < eventOrder.getTicketCount(); i++) {
+                Ticket ticket = new Ticket(event, user, Ticket.TicketStatus.VALID);
+                ticket = ticketRepository.save(ticket);
+                order.addTicket(ticket);
+            }
         }
+    
         return orderRepository.save(order);
     }
 
