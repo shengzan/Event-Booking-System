@@ -3,6 +3,8 @@ package com.example.eventbookingsystem.model;
 import jakarta.persistence.*;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Ticket {
     @Id
@@ -15,6 +17,7 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonBackReference
     private Order order;
 
     @ManyToOne
