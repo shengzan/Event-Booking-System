@@ -51,7 +51,7 @@ class OrderControllerTest {
         testOrder = new Order();
         testOrder.setId(1L);
         testOrder.setUser(testUser);
-        testOrder.setStatus(Order.OrderStatus.CONFIRMED);
+        testOrder.setStatus(Order.OrderStatus.PAID);
 
         testOrderRequest = new OrderRequest();
         testOrderRequest.setEventOrders(Arrays.asList(new EventOrder(1L, 2)));
