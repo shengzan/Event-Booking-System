@@ -47,13 +47,11 @@ public class EventController {
     public ResponseEntity<?> addEvent(@RequestBody @Valid Event event, Authentication authentication) {
         try {
             User user = userService.getUserByUsername(authentication.getName());
-            if (user.getRole() == User.UserRole.ORGANIZER || user.getRole() == User.UserRole.ADMIN) {
-                event.setOrganizer(user);
-                event.setAvailableCapacity(event.getCapacity()); // Setting availableCapacity because Spring will not call the Event constructor.
-                Event createdEvent = eventService.addEvent(event);
-                return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only organizers and admins can create events");
+            // Allow all authenticated users to create events
+            event.setOrganizer(user);
+            event.setAvailableCapacity(event.getCapacity()); // Setting availableCapacity because Spring will not call the Event constructor.
+            Event createdEvent = eventService.addEvent(event);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating event: " + e.getMessage());
         }
