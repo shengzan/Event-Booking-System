@@ -102,12 +102,27 @@ class EventControllerTest {
     @Test
     void updateEvent_Authorized() {
         when(eventService.isUserEventOrganizer(1L, 1L)).thenReturn(true);
+        when(eventService.getEventById(1L)).thenReturn(testEvent);
         when(eventService.updateEvent(eq(1L), any(Event.class))).thenReturn(testEvent);
 
         ResponseEntity<?> response = eventController.updateEvent(1L, testEvent, authentication);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(testEvent, response.getBody());
+        verify(eventService).getEventById(1L);
+        verify(eventService).updateEvent(eq(1L), any(Event.class));
+    }
+
+    @Test
+    void updateEvent_NotFound() {
+        when(eventService.isUserEventOrganizer(1L, 1L)).thenReturn(true);
+        when(eventService.getEventById(1L)).thenReturn(null);
+
+        ResponseEntity<?> response = eventController.updateEvent(1L, testEvent, authentication);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(eventService).getEventById(1L);
+        verify(eventService, never()).updateEvent(eq(1L), any(Event.class));
     }
 
     @Test
