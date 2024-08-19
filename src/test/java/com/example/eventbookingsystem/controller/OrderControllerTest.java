@@ -143,9 +143,9 @@ class OrderControllerTest {
     void getOrdersByStatus_AsAdmin() {
         testUser.setRole(User.UserRole.ADMIN);
         List<Order> orders = Arrays.asList(testOrder);
-        when(orderService.getOrdersByStatus(Order.OrderStatus.CONFIRMED)).thenReturn(orders);
+        when(orderService.getOrdersByStatus(Order.OrderStatus.PAID)).thenReturn(orders);
 
-        ResponseEntity<?> response = orderController.getOrdersByStatus(Order.OrderStatus.CONFIRMED, authentication);
+        ResponseEntity<?> response = orderController.getOrdersByStatus(Order.OrderStatus.PAID, authentication);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(orders, response.getBody());
@@ -153,7 +153,7 @@ class OrderControllerTest {
 
     @Test
     void getOrdersByStatus_AsUser() {
-        ResponseEntity<?> response = orderController.getOrdersByStatus(Order.OrderStatus.CONFIRMED, authentication);
+        ResponseEntity<?> response = orderController.getOrdersByStatus(Order.OrderStatus.PAID, authentication);
 
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
