@@ -39,7 +39,7 @@ class UserProfileControllerTest {
         user.setId(1L);
         user.setUsername(username);
         user.setEmail("test@example.com");
-        user.setRole(User.UserRole.USER);
+        user.setRole(User.UserRole.CUSTOMER);
         user.setFirstName("Test");
         user.setLastName("User");
         user.setPhoneNumber("+1234567890");

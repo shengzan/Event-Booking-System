@@ -9,7 +9,7 @@ Content-Type: application/json
   "firstName": "New",
   "lastName": "User",
   "phoneNumber": "1234567890",
-  "role": "USER"
+  "role": "CUSTOMER"
 }
 
 ### Login user

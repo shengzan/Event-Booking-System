@@ -46,7 +46,7 @@ class OrderControllerTest {
         testUser = new User();
         testUser.setId(1L);
         testUser.setUsername("testuser");
-        testUser.setRole(User.UserRole.USER);
+        testUser.setRole(User.UserRole.CUSTOMER);
 
         testOrder = new Order();
         testOrder.setId(1L);

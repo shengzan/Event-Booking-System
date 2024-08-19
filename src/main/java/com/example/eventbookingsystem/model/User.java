@@ -35,7 +35,7 @@ public class User {
     private UserRole role;
     
     public enum UserRole {
-        USER, ADMIN, ORGANIZER
+        CUSTOMER, ADMIN, ORGANIZER
     }
     
     @Size(max = 50, message = "First name must be at most 50 characters")

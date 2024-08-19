@@ -47,7 +47,7 @@ class TicketControllerTest {
         testUser = new User();
         testUser.setId(1L);
         testUser.setUsername("testuser");
-        testUser.setRole(User.UserRole.USER);
+        testUser.setRole(User.UserRole.CUSTOMER);
 
         testTicket = new Ticket();
         testTicket.setId(1L);
