@@ -52,7 +52,7 @@ class TicketControllerTest {
         testTicket = new Ticket();
         testTicket.setId(1L);
         testTicket.setUser(testUser);
-        testTicket.setStatus(Ticket.TicketStatus.ACTIVE);
+        testTicket.setStatus(Ticket.TicketStatus.PAID);
 
         when(authentication.getName()).thenReturn("testuser");
         when(userService.getUserByUsername("testuser")).thenReturn(testUser);
@@ -106,9 +106,9 @@ class TicketControllerTest {
     @Test
     void updateTicketStatus_AsAdmin() {
         testUser.setRole(User.UserRole.ADMIN);
-        when(ticketService.updateTicketStatus(1L, Ticket.TicketStatus.USED)).thenReturn(testTicket);
+        when(ticketService.updateTicketStatus(1L, Ticket.TicketStatus.CANCELED)).thenReturn(testTicket);
 
-        ResponseEntity<?> response = ticketController.updateTicketStatus(1L, Ticket.TicketStatus.USED, authentication);
+        ResponseEntity<?> response = ticketController.updateTicketStatus(1L, Ticket.TicketStatus.CANCELED, authentication);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(testTicket, response.getBody());
@@ -116,7 +116,7 @@ class TicketControllerTest {
 
     @Test
     void updateTicketStatus_AsUser() {
-        ResponseEntity<?> response = ticketController.updateTicketStatus(1L, Ticket.TicketStatus.USED, authentication);
+        ResponseEntity<?> response = ticketController.updateTicketStatus(1L, Ticket.TicketStatus.CANCELED, authentication);
 
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
