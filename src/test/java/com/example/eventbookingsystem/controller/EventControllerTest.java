@@ -93,7 +93,7 @@ class EventControllerTest {
     void createEvent() {
         when(eventService.addEvent(any(Event.class))).thenReturn(testEvent);
 
-        ResponseEntity<?> response = eventController.createEvent(testEvent, authentication);
+        ResponseEntity<?> response = eventController.addEvent(testEvent, authentication);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(testEvent, response.getBody());
