@@ -97,8 +97,14 @@ public class EventController {
         }
     }
 
-    @GetMapping("/organizer/{organizerId}")
-    public ResponseEntity<List<Event>> getEventsByOrganizer(@PathVariable Long organizerId) {
-        return ResponseEntity.ok(eventService.getEventsByOrganizer(organizerId));
+    @GetMapping("/organizer")
+    public ResponseEntity<?> getEventsByOrganizer(Authentication authentication) {
+        try {
+            User user = userService.getUserByUsername(authentication.getName());
+            List<Event> events = eventService.getEventsByOrganizer(user.getId());
+            return ResponseEntity.ok(events);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error retrieving events: " + e.getMessage());
+        }
     }
 }
