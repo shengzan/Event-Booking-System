@@ -26,11 +26,13 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserController(UserService userService, JwtTokenProvider jwtTokenProvider) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -49,14 +51,18 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         logger.info("Login attempt for user: {}", loginRequest.getUsername());
-        if (userService.authenticateUser(loginRequest.getUsername(), loginRequest.getPassword())) {
-            String token = jwtTokenProvider.createToken(loginRequest.getUsername());
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = jwtTokenProvider.createToken(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername());
             logger.info("User {} successfully authenticated", loginRequest.getUsername());
             return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + token)
                 .body("User authenticated successfully");
-        } else {
-            logger.error("Authentication failed for user: {}", loginRequest.getUsername());
+        } catch (AuthenticationException e) {
+            logger.error("Authentication failed for user: {}", loginRequest.getUsername(), e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("Invalid username or password");
         }
