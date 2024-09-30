@@ -76,3 +76,5 @@ logs/
 
 # HTTP client environment file
 http-client.env.json
+# Git logs
+git_logs/
